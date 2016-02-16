@@ -1,2 +1,2 @@
-# Black-Box-Testing-and-Prediction-Tool
+# Android Testing Tool
 An Android tool for testing and predicting non-functional properties of black-box components
