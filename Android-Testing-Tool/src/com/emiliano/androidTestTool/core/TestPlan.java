@@ -34,13 +34,18 @@ public class TestPlan<Input, Output> {
 
 	private OperationMetricSet<Input, Output> operationMetrics;
 
-	public TestPlan() {
+	public TestPlan(Context context) {
+		this.context=context;
 		this.inputs = new LinkedList<Input>();
 		this.components = new LinkedList<Component<Input, Output>>();
 		this.testPlanMetrics = new MetricSet<TestPlan<Input, Output>>();
 		this.inputMetrics = new MetricSet<Input>();
 		this.componentMetrics = new MetricSet<Component<Input, Output>>();
 		this.operationMetrics = new OperationMetricSet<Input, Output>();
+	}
+	
+	public TestPlan(){
+		this(null);
 	}
 
 	public String getName() {

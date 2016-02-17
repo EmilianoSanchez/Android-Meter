@@ -152,21 +152,26 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 		writer.close();
 	}
 
-	private File getFilePath() throws IOException {
-		// File externalDir = this.getExternalFilesDir(null);
+	protected File getFilePath() throws IOException {
 		String externalDir = Environment.getExternalStorageDirectory().getAbsolutePath();
 		if (externalDir == null)
 			throw new IOException("No external storage available");
-		File file;
-		int number = 0;
-		do {
-			number++;
-			// file=new
-			// File(externalDir.getAbsolutePath()+"/results"+number+".csv");
-			file = new File(externalDir + "/results" + number + ".csv");
-			Log.i("BlackBox", file.getAbsolutePath());
-		} while (file.exists());
-		return file;
+		return new File(externalDir + "/"+getFileName() + ".csv");
+		
+//		File file;
+//		int number = 0;
+//		do {
+//			number++;
+//			// file=new
+//			// File(externalDir.getAbsolutePath()+"/results"+number+".csv");
+//			file = new File(externalDir + "/results" + number + ".csv");
+//			Log.i("BlackBox", file.getAbsolutePath());
+//		} while (file.exists());
+//		return file;
+	}
+	
+	protected String getFileName(){
+		return "results";
 	}
 
 	@Override
