@@ -128,3 +128,9 @@ It is the object that stores the measured data and exports it into a CSV file fo
 ###Measure
 ###Predict
 ###Apply
+
+##To do
+-More metrics
+-Load simulation
+-Incremental prediction models in Android
+-Distributed prediction models in Android
