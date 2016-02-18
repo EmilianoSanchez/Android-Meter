@@ -14,6 +14,7 @@ An Android tool and method for testing and predicting performance properties of 
   * [Measure](#measure)
   * [Predict](#predict)
   * [Apply](#apply)
+- [To do](#to-do)
 
 
 ##Objectives
@@ -130,7 +131,7 @@ It is the object that stores the measured data and exports it into a CSV file fo
 ###Apply
 
 ##To do
--More metrics
--Load simulation
--Incremental prediction models in Android
--Distributed prediction models in Android
+- More metrics
+- Load simulation
+- Incremental prediction models in Android
+- Distributed prediction models in Android
