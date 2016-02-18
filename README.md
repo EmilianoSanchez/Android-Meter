@@ -19,11 +19,42 @@ of algorithm configurations, depending on the problem instance and hardware char
 
 ## Concepts
 
-- Component
-- Operation (or Task)
-- Input
+### Component
+A component is an individual runtime software entity that provides services (a set of related functions and data) through an specific interface (API). The tool focus on three kind of components:
+- **Object instances**, components that reside on the application memory space. 
+- **Android Services**, background processes that reside on the same device and are accessed via Intends, the interprocess communication mechanism implemented by Android OS. 
+- **Web Services**, remote components that reside outside the device and are accessed via Web communication protocols, like HTTP.
+
+The tool use a simplyfied component representation defined by the **Component** interface. The **execute** method must implement the component operations.
+
+Example of an Object instance component:
+```java
+Component<Integer[], Integer> sumatoria = new Component<Integer[], Integer>() {
+
+	@Override
+	public String getName() {
+		return "Sumatoria";
+	}
+
+	@Override
+	public Integer execute(Integer[] input) {
+		int output = 0;
+		for (int element : input)
+			output += element;
+		return output;
+	}
+};
+```
+Android and Web Services components can be easily integrated by extending **AndroidServiceClient** and **WebServiceClient** classes respectively. They implement the Component interface.
+
+![Imagen1.png]({{site.baseurl}}/Imagen1.png)
+
+### Operation (or Task): 
+- Input: object that encapsulates the input parameters of the requested component operation.
 - Output
-- Execution context
+### Execution context
+
+### Test plan
 - Metrics: unit of code that computes a feature value from some element.
     - Execution context metrics
         - Static context metrics
@@ -31,7 +62,6 @@ of algorithm configurations, depending on the problem instance and hardware char
     - Input metrics
     - Component metrics
     - Operation metrics
-- Test plan
 - Results
 
 ## Workflow
