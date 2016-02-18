@@ -7,10 +7,7 @@ public class SolutionValueMetric implements OperationMetric<KnapsackInstance,Kna
 
 	@Override
 	public Object calculate(KnapsackSolution element) {
-		double totalValue=0.0;
-		for(double value:element.problem.itemValues)
-			totalValue+=value;
-		return totalValue;
+		return element.getValue();
 	}
 
 	@Override
