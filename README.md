@@ -8,6 +8,8 @@ An Android tool and method for testing and predicting performance properties of 
   * [Operation](#operation)
   * [Execution context](#execution-context)
   * [Test plan](#test-plan)
+  * [Metrics](#metrics)
+  * [Results](#results)
 - [Workflow](#workflow)
   * [Measure](#measure)
   * [Predict](#predict)
@@ -38,15 +40,15 @@ A component is an individual runtime software entity that provides services (a s
 - **Android Services**, background processes that reside on the same device and are accessed via [Intents](http://developer.android.com/intl/es/reference/android/content/Intent.html), the interprocess communication mechanism implemented by Android OS. 
 - **Web Services**, remote components that reside outside the device and are accessed via Web communication protocols, like HTTP.
 
-The tool use a simplyfied component representation defined by the **Component** interface. The **execute** method must implement the component operations.
+The tool use a simplyfied component representation defined by the **Component** interface. The **execute** method must implement the component behaviour as a blocking function.
 
 Example of an Object instance component:
 ```java
-Component<Integer[], Integer> sumatoria = new Component<Integer[], Integer>() {
+Component<Integer[], Integer> sum = new Component<Integer[], Integer>() {
 
 	@Override
 	public String getName() {
-		return "Sumatoria";
+		return "Sum";
 	}
 
 	@Override
@@ -58,12 +60,12 @@ Component<Integer[], Integer> sumatoria = new Component<Integer[], Integer>() {
 	}
 };
 ```
-Android and Web Services components can be easily integrated by extending **AndroidServiceClient** and **WebServiceClient** classes respectively. They implement the Component interface.
+Android and Web Services components can be easily integrated by implementing **AndroidServiceClient** and **WebServiceClient** classes respectively. They extends the Component interface.
 
 ![Components](/Documentation/Images/Components.png)
 
 ###Operation:
-An operation, task or job is a unit of work performed by a component. It is requested by calling the execute method of the component with a given **input** object. This blocking method returns an **Output** object when the operation is done.
+An operation, task or job is a unit of work performed by a component. An operation is requested by calling the execute method of the component with a given **Input** object. When the operation is done, an **Output** object is returned.
 
 - Input: object that encapsulates the input parameters of the requested component operation. This object may include data and configuration parameters.
 - Output: object that encapsulates the response of the operation.
@@ -76,48 +78,52 @@ A test plan is an object instance of the **TestPlan** class that defines a syste
 A test plan is composed by: 
 - a set of components, 
 - a set of input objects,
-- and a set of metrics that carry out the measures.
+- and a set of **metrics** that carry out the measures.
 
 An **Executor** object executes the test plans and stores the measured values on a **Result** object instance. The following pseudo-code describe the execution sequence of operations and measures:
 
 ```java
-public Result executeTestPlan(TestPlan testPlan){
-	Results results=new Results();
-	for(GlobalMetric m : testPlan.getGlobalMetrics())
-		results.addGlobalMeasure(m.calculate(testPlan));
-	for(Input i : testPlan.getInputs())
-		for(InputMetric m : testPlan.getInputMetrics())
-			results.addInputMeasure(m.calculate(i));
-	for(Component c : testPlan.getComponents())
-		for(ComponentMetric m : testPlan.getComponentMetrics())
-			results.addComponentMeasure(m.calculate(c));
-	for(Input i : testPlan.getInputs())
-		for(Component c : testPlan.getComponents()){
-			for(OperationMetric m : testPlan.getOperationMetrics())
-				m.beforeOperation(i,c);
-			Output o=c.execute(i);
-			for(OperationMetric m : testPlan.getOperationMetrics())
-				results.addOperationMeasure(m.calculate(o));
-		}
-	return Results;
+public class Executor {
+	...
+	public Result executeTestPlan(TestPlan testPlan){
+		Results results=new Results();
+		for(GlobalMetric m : testPlan.getGlobalMetrics())
+			results.addGlobalMeasure(m.calculate(testPlan));
+		for(Input i : testPlan.getInputs())
+			for(InputMetric m : testPlan.getInputMetrics())
+				results.addInputMeasure(m.calculate(i));
+		for(Component c : testPlan.getComponents())
+			for(ComponentMetric m : testPlan.getComponentMetrics())
+				results.addComponentMeasure(m.calculate(c));
+		for(Input i : testPlan.getInputs())
+			for(Component c : testPlan.getComponents()){
+				for(OperationMetric m : testPlan.getOperationMetrics())
+					m.beforeOperation(i,c);
+				Output o=c.execute(i);
+				for(OperationMetric m : testPlan.getOperationMetrics())
+					results.addOperationMeasure(m.calculate(o));
+			}
+		return Results;
+	}
 }
 ```
-
-**Metrics* are the units of code that computes a measure or feature value from some element. The tool distinguish 4 kind of metrics depending on the measured element:
+###Metrics
+They are the units of code that computes a measure or feature value from some element. The tool distinguish 4 kind of metrics depending on the measured element:
 - **Global metrics** compute **static context features**, i.e., execution context features that remain static during the test plan, like the device model, CPU architecture, number of CPU cores, memory size, etc.
 - **Input metrics** compute **input features** that depends on the problem domain. For instance, in face detection on images, some input features are the image name, size, color contrast, file format, etc.  
 - **Component metrics** compute **component features** like its name, location, etc.
 - **Operation metrics** compute three kind of features:
- * **Output features**: this are characteristics of the operation result, like its size, quality, etc. Like input features, they depends on the problem domain. In face detection for instance, the output is a vector with the location of the detected features, therefore, an interesting output feature is the size of this vector, i.e., the number of detected faces.
+ * **Output features**: these are characteristics of the operation result, like its size, quality, etc. Like input features, they depend on the problem domain. In face detection for instance, the output is a vector with the location of the detected features, therefore, an interesting output feature is the size of this vector, i.e., the number of detected faces.
  * **Dynamic context features**: this are characteristics of the execution environment that may vary from operation to operation, like the CPU usage, number of runnning processes, connection type, device location, etc.
- * **Performance features**: this are the performance measures that vary from operation to operation, like response time, consumed battery, operation executed with error or not, etc. 
+ * **Performance features**: this are the performance measures of interest that vary from operation to operation, like response time, consumed battery, operation executed with error or not, etc. 
 
-**Results** is the object that stores the measured data and exports it into a CSV file for its latter processing. 
+###Results
+It is the object that stores the measured data and exports it into a CSV file for its latter processing. 
 
 ##Workflow
-- **Measure** (or test): obtain empirical data performing component operations.
+- **Measure** (or test): obtain empirical data performing a test plan.
 - **Predict**: use the collected data for building and evaluating prediction models
-- **Apply**: use the models in some practical context.
+- **Apply**: use the models in some practical context: algoritm configuration, service selection, job scheduling, etc.
 
 ###Measure
 ###Predict
