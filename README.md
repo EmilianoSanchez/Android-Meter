@@ -1,12 +1,12 @@
-# Android Performance Testing and Prediction
+#Android Performance Testing and Prediction
 An Android tool and method for testing and predicting performance properties of runtime components using machine learning techniques.
 
-#### Table of Contents
+####Table of Contents
 - [Objectives](#Objectives)
 - [Concepts](#Concepts)
 - [Workflow](#Workflow)
 
-## Objectives
+##Objectives
 The performance of runtime components (algoritms, Web services, background processes, etc) depends on several factors: the **execution context** where the component is running, the **input parameters** of the requested component operation, and its **internal implementation**. However, when using third-party components, we usually do not have knowledge of its internal implementation. This components are “black-boxes” to mobile developers, for which their Application Programming Interfaces (APIs) are known but not their internal working.
 
 To have some insight of their performance, machine learning techniques over empirically collected data can be used to build prediction models of the component’s runtime, as a function of input parameters and execution context specific features. 
@@ -22,9 +22,9 @@ of algorithm configurations, depending on the problem instance and hardware char
  - Task scheduling in mobile grids: given a set of tasks to be assigned among a set of devices, performance models can obtain an accurate measure of the response time of each task over each device in order to minimize the makespan. 
  - Others.
 
-## Concepts
+##Concepts
 
-### Component
+###Component
 A component is an individual runtime software entity that provides services (a set of related functions and data) through an specific interface (API). The tool focus on three kind of components:
 - **Object instances**, components that reside on the application memory space. 
 - **Android Services**, background processes that reside on the same device and are accessed via Intends, the interprocess communication mechanism implemented by Android OS. 
@@ -54,12 +54,12 @@ Android and Web Services components can be easily integrated by extending **Andr
 
 ![Components](/Documentation/Images/Components.png)
 
-### Operation (or Task): 
+###Operation (or Task): 
 - Input: object that encapsulates the input parameters of the requested component operation.
 - Output
-### Execution context
+###Execution context
 
-### Test plan
+###Test plan
 - Metrics: unit of code that computes a feature value from some element.
     - Execution context metrics
         - Static context metrics
@@ -69,11 +69,11 @@ Android and Web Services components can be easily integrated by extending **Andr
     - Operation metrics
 - Results
 
-## Workflow
+##Workflow
 - **Measure** (or test): obtain empirical data performing component operations.
 - **Predict**: use the collected data for building and evaluating prediction models
 - **Apply**: use the models in some practical context.
 
-### Measure
-### Predict
-### Apply
+###Measure
+###Predict
+###Apply
