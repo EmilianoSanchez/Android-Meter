@@ -47,7 +47,7 @@ Component<Integer[], Integer> sumatoria = new Component<Integer[], Integer>() {
 ```
 Android and Web Services components can be easily integrated by extending **AndroidServiceClient** and **WebServiceClient** classes respectively. They implement the Component interface.
 
-![Imagen1.png]({{site.baseurl}}/Imagen1.png)
+![Components]({{site.baseurl}}/Documentacion/Images/Components.png)
 
 ### Operation (or Task): 
 - Input: object that encapsulates the input parameters of the requested component operation.
