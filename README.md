@@ -2,9 +2,17 @@
 An Android tool and method for testing and predicting performance properties of runtime components using machine learning techniques.
 
 ####Table of Contents
-- [Objectives](#Objectives)
-- [Concepts](#Concepts)
-- [Workflow](#Workflow)
+- [Objectives](#objectives)
+- [Concepts](#concepts)
+  * [Component](#component)
+  * [Operation](#operation)
+  * [Execution context](#execution-context)
+  * [Test plan](#test-plan)
+- [Workflow](#workflow)
+  * [Measure](#measure)
+  * [Predict](#predict)
+  * [Apply](#apply)
+
 
 ##Objectives
 The performance of runtime components (algoritms, Web services, background processes, etc) depends on several factors: the **execution context** where the component is running, the **input parameters** of the requested component operation, and its **internal implementation**. However, when using third-party components, we usually do not have knowledge of its internal implementation. This components are “black-boxes” to mobile developers, for which their Application Programming Interfaces (APIs) are known but not their internal working.
@@ -54,9 +62,10 @@ Android and Web Services components can be easily integrated by extending **Andr
 
 ![Components](/Documentation/Images/Components.png)
 
-###Operation (or Task): 
+###Operation: 
 - Input: object that encapsulates the input parameters of the requested component operation.
 - Output
+
 ###Execution context
 
 ###Test plan
