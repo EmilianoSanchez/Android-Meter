@@ -100,9 +100,9 @@ A test plan is composed by:
 An **Executor** object executes the test plans and stores the measured values on a **Result** object instance. The following pseudo-code describe the execution sequence of operations and measures:
 
 ```java
-public class Executor {
+class Executor {
 	...
-	public Result executeTestPlan(TestPlan testPlan){
+	Result executeTestPlan(TestPlan testPlan){
 		Results results=new Results();
 		for(GlobalMetric m : testPlan.getGlobalMetrics())
 			results.addGlobalMeasure(m.calculate(testPlan));
