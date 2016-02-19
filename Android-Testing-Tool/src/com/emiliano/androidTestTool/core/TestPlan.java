@@ -18,7 +18,7 @@ public class TestPlan<Input, Output> {
 
 	private long delayBetweenOperations = 0;
 	
-	private String name = "Test Plan";
+	private String name;
 	
 	private Context context;
 
@@ -26,7 +26,7 @@ public class TestPlan<Input, Output> {
 
 	private Collection<Component<Input, Output>> components;
 	
-	private MetricSet<TestPlan<Input, Output>> testPlanMetrics;
+	private MetricSet<TestPlan<Input, Output>> globalMetrics;
 
 	private MetricSet<Input> inputMetrics;
 
@@ -34,18 +34,15 @@ public class TestPlan<Input, Output> {
 
 	private OperationMetricSet<Input, Output> operationMetrics;
 
-	public TestPlan(Context context) {
+	public TestPlan(String name,Context context) {
+		this.name=name;
 		this.context=context;
 		this.inputs = new LinkedList<Input>();
 		this.components = new LinkedList<Component<Input, Output>>();
-		this.testPlanMetrics = new MetricSet<TestPlan<Input, Output>>();
+		this.globalMetrics = new MetricSet<TestPlan<Input, Output>>();
 		this.inputMetrics = new MetricSet<Input>();
 		this.componentMetrics = new MetricSet<Component<Input, Output>>();
 		this.operationMetrics = new OperationMetricSet<Input, Output>();
-	}
-	
-	public TestPlan(){
-		this(null);
 	}
 
 	public String getName() {
@@ -72,16 +69,16 @@ public class TestPlan<Input, Output> {
 		this.components.addAll(Arrays.asList(components));
 	}
 
-	public MetricSet<TestPlan<Input, Output>> getTestPlanMetrics() {
-		return testPlanMetrics;
+	public MetricSet<TestPlan<Input, Output>> getGlobalMetrics() {
+		return globalMetrics;
 	}
 
-	public void setTestPlanMetrics(MetricSet<TestPlan<Input, Output>> testPlanMetrics) {
-		this.testPlanMetrics = testPlanMetrics;
+	public void setGlobalMetrics(MetricSet<TestPlan<Input, Output>> globalMetrics) {
+		this.globalMetrics = globalMetrics;
 	}
 
-	public void addTestPlanMetrics(Metric<TestPlan<Input, Output>> metric) {
-		this.testPlanMetrics.addMetric(metric);
+	public void addGlobalMetrics(Metric<TestPlan<Input, Output>> metric) {
+		this.globalMetrics.addMetric(metric);
 	}
 
 	public MetricSet<Input> getInputMetrics() {

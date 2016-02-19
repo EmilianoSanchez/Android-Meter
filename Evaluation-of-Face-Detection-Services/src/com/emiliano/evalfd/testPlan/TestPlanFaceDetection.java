@@ -20,6 +20,7 @@ import com.emiliano.evalfd.services.SkyBiometry;
 public class TestPlanFaceDetection extends TestPlan<InputFaceDetection, FaceDetectionResult>{
 	@SuppressWarnings("unchecked")
 	public TestPlanFaceDetection(Context context){
+		super("Test plan face detection",context);
 		this.setDelayBetweenOperations(10);
 		
 //		this.addBlackBoxes(new BlackBoxFaceRect());

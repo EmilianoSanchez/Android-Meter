@@ -7,7 +7,7 @@ public class ActivityDummysample   extends TestToolActivity<Integer[], Integer>{
 
 	@Override
 	protected TestPlan<Integer[], Integer> getPlan() {
-		return new TestPlanSample();
+		return new TestPlanDummySample(this);
 	}
 	
 	@Override

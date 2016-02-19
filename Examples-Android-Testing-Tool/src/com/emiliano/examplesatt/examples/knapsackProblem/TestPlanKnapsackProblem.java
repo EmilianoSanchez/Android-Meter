@@ -10,6 +10,7 @@ public class TestPlanKnapsackProblem extends TestPlan<KnapsackInstance,KnapsackS
 	
 	@SuppressWarnings("unchecked")
 	public TestPlanKnapsackProblem(Context context) {
+		super("Test plan Knapsack problem",context);
 		this.addComponents(new GreedyAlgorithm());
 		this.addComponents(new BacktrackingAlgorithm());
 	

@@ -30,55 +30,59 @@ public class Executor<Input, Output> extends
 		for(int tp=0;tp<params.length;tp++){		
 			TestPlan<Input, Output> testPlan = params[tp];
 			if(testPlan!=null){
-				this.publishProgress("executing "+testPlan.getName());
-				testPlan.setAndroidContext(context);
-				results[tp]=new Results(testPlan);
-				
-				Map<String, Object> testPlanResults = testPlan.getTestPlanMetrics().calculate(testPlan);
-				results[tp].addTestPlanResult(testPlanResults);
+				results[tp]=executeTestPlan(testPlan);
+			}
+		}
+		return results;
+	}
+	
+	protected Results executeTestPlan(TestPlan<Input, Output> testPlan){
+		this.publishProgress("executing "+testPlan.getName());
+		Results results=new Results(testPlan);
 		
-				int currentOperation = 0;
-				int totalOperations = testPlan.getInputs().size()
-						* testPlan.getComponents().size();
-		
-				int componentId=-1;
-				int inputId=-1;
-				
-				for (Input input : testPlan.getInputs()) {
-					inputId++;
-					
-					Map<String, Object> inputResults = testPlan.getInputMetrics().calculate(input);
-					results[tp].addInputResult(inputId,inputResults);
-					
-					for (Component<Input, Output> component : testPlan.getComponents()) {
-						componentId++;
-						
-						if(inputId==0){
-							Map<String, Object> componentResults = testPlan.getComponentMetrics().calculate(component);
-							results[tp].addComponentResult(componentId,componentResults);
-						}
-						
-						currentOperation++;
-						this.publishProgress("executing "+testPlan.getName()+": operation "
-								+ currentOperation + " of " + totalOperations);
-						
-						for(int executionId=0;executionId<testPlan.getExecutionsPerOperation();executionId++){
-							testPlan.getOperationMetrics().beforeOperation(input, component);
+		Map<String, Object> testPlanResults = testPlan.getGlobalMetrics().calculate(testPlan);
+		results.addTestPlanResult(testPlanResults);
 
-							Output output = component.execute(input);
+		int currentOperation = 0;
+		int totalOperations = testPlan.getInputs().size()
+				* testPlan.getComponents().size();
 
-							Map<String, Object> operationResults = testPlan.getOperationMetrics().calculate(output);
+		int componentId=-1;
+		int inputId=-1;
 		
-							results[tp].addOperationResult(inputId,componentId,executionId,operationResults);
-							
-							if(testPlan.getDelayBetweenOperations()>0){
-								synchronized (this) {
-									try {
-										wait(testPlan.getDelayBetweenOperations());
-									} catch (InterruptedException exeption) {
-										exeption.printStackTrace();
-									}
-								}
+		for (Input input : testPlan.getInputs()) {
+			inputId++;
+			
+			Map<String, Object> inputResults = testPlan.getInputMetrics().calculate(input);
+			results.addInputResult(inputId,inputResults);
+			
+			for (Component<Input, Output> component : testPlan.getComponents()) {
+				componentId++;
+				
+				if(inputId==0){
+					Map<String, Object> componentResults = testPlan.getComponentMetrics().calculate(component);
+					results.addComponentResult(componentId,componentResults);
+				}
+				
+				currentOperation++;
+				this.publishProgress("executing "+testPlan.getName()+": operation "
+						+ currentOperation + " of " + totalOperations);
+				
+				for(int executionId=0;executionId<testPlan.getExecutionsPerOperation();executionId++){
+					testPlan.getOperationMetrics().beforeOperation(input, component);
+
+					Output output = component.execute(input);
+
+					Map<String, Object> operationResults = testPlan.getOperationMetrics().calculate(output);
+
+					results.addOperationResult(inputId,componentId,executionId,operationResults);
+					
+					if(testPlan.getDelayBetweenOperations()>0){
+						synchronized (this) {
+							try {
+								wait(testPlan.getDelayBetweenOperations());
+							} catch (InterruptedException exeption) {
+								exeption.printStackTrace();
 							}
 						}
 					}

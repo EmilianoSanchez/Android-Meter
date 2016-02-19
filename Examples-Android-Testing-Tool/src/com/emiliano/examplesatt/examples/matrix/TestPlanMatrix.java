@@ -12,6 +12,7 @@ public class TestPlanMatrix extends TestPlan<MatrixPair, double[][]> {
 
 	@SuppressWarnings("unchecked")
 	public TestPlanMatrix(Context context) {
+		super("Test plan matrix multiplication",context);
 		this.addComponents(new MatrixMultiplication());
 		this.addComponents(new MatrixMultiplicationMultiThread());
 
