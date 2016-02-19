@@ -1,29 +1,28 @@
 #Android Performance Testing and Prediction
-An Android tool and method for testing and predicting performance properties of runtime components using machine learning techniques.
+A method and Android tools for testing and predicting performance properties of runtime components using machine learning techniques.
 
 ####Table of Contents
 - [Objectives](#objectives)
-- [Concepts](#concepts)
+- [Workflow overview](#workflow-overview) 
+- [Testing](#testing)
   * [Component](#component)
   * [Operation](#operation)
   * [Execution context](#execution-context)
   * [Test plan](#test-plan)
   * [Metrics](#metrics)
   * [Results](#results)
-- [Workflow](#workflow)
-  * [Measure](#measure)
-  * [Predict](#predict)
-  * [Apply](#apply)
+- [Prediction](#prediction)
+- [Application](#application)
 - [To do](#to-do)
 
 
 ##Objectives
-The performance of runtime components (algoritms, Web services, background processes, etc) depends on several factors: the **execution context** where the component is running, the **input parameters** of the requested component operation, and its **internal implementation**. However, when using third-party components, we usually do not have knowledge of its internal implementation. This components are “black-boxes” to mobile developers, for which their Application Programming Interfaces (APIs) are known but not their internal working.
+The performance of runtime components (algoritms, Web services, background processes, etc) depends on several factors: the **execution context** where the component is running, the **input parameters** of the requested component operation, and its **internal implementation**. However, when using third-party components, we usually do not have knowledge of its internal implementation. This components are “black-boxes” to software developers, for which their Application Programming Interfaces (APIs) are known but not their internal working.
 
 To have some insight of their performance, machine learning techniques over empirically collected data can be used to build prediction models of the component’s runtime, as a function of input parameters and execution context specific features. 
 
 This method focus on the following properties:
- - **Response time**: it is the total amount of time that a component takes to perform a task or operation, i.e. to respond to a request with a given input. A response time model over a component **C** is defined as a function **Rc(E,I)=r**, being **E** a set of measured execution context features **E=[E1,...Ee]** (like CPU cores, Network type, etc), **I** a set of measured input parameter features **I=[I1,...Ii]** (input size in bytes, etc), and **r** the estimated response time.
+ - **Response time**: it is the total amount of time that a component takes to perform a task or **operation**, i.e. to respond to a request with a given input. A response time model over a component **C** is defined as a function **Rc(E,I)=r**, being **E** a set of measured execution context features **E=[E1,...Ee]** (like CPU cores, Network type, etc), **I** a set of measured input parameter features **I=[I1,...Ii]** (input size in bytes, etc), and **r** the estimated response time.
  - **Accuracy**: it is a measure of the quality of the component output results. It has different meanings depending on the required functionality. For instance, in classification problems, it is the statistical measure of how well a classifier, like a face detector, correctly identifies or excludes a condition. In optimization problems, it is also known as Optimality and is usually measured as a ratio between the obteined output solution and the optimal known solution. In most cases, accuracy do not depends on execution context features, in contrast to response time. Therefore, an accuracy model over a component **C** is defined as a function **Ac(I)=a**, being  **I** a set of measured input parameter features **I=[I1,...Ii]**, and **a** the estimated accuracy.
 
 Such models are known as **empirical performance models** (EPM), and are useful in a variety of practical contexts:
@@ -33,7 +32,24 @@ of algorithm configurations, depending on the problem instance and hardware char
  - Task scheduling in mobile grids: given a set of tasks to be assigned among a set of devices, performance models can obtain an accurate measure of the response time of each task over each device in order to minimize the makespan. 
  - Others.
 
-##Concepts
+##Workflow overview
+
+The method consist of the following activities:
+- **Testing** (or measurement): obtain empirical data performing a test plan over a set of components.
+- **Prediction**: use the collected data for building and evaluating prediction models.
+- **Application**: use the models in some practical context: algoritm configuration, service selection, job scheduling, etc.
+
+![Method workflow](/Documentation/Images/MethodWorkflow.png)
+
+##Testing
+
+The testing activity is supported by the [Android Testing Tool](https://github.com/EmilianoSanchez/Android-Performance-Testing-and-Prediction/tree/master/Android-Testing-Tool) (ATT). It is an Android library that automatically performs test plans, i.e., a systemathic execution and measure of component operations with a set of inputs and varying execution conditions. 
+
+ATT use examples are included in the following Android application projects:
+- [Examples-Android-Testing-Tool](https://github.com/EmilianoSanchez/Android-Performance-Testing-and-Prediction/tree/master/Examples-Android-Testing-Tool): it includes basic testing examples in domains like matrix multiplication and algoritms for solving the Knapsack problem. 
+- [Evaluation-of-Face-Detection-Services](https://github.com/EmilianoSanchez/Android-Performance-Testing-and-Prediction/tree/master/Evaluation-of-Face-Detection-Services): it extends ATT for testing Android Services and Web Services that perform face detection over images.
+
+The core concepts that describe the ATT framework are explained below:
 
 ###Component
 A component is an individual runtime software entity that provides services (a set of related functions and data) through an specific interface (API). The tool focus on three kind of components:
@@ -121,14 +137,9 @@ They are the units of code that computes a measure or feature value from some el
 ###Results
 It is the object that stores the measured data and exports it into a CSV file for its latter processing. 
 
-##Workflow
-- **Measure** (or test): obtain empirical data performing a test plan.
-- **Predict**: use the collected data for building and evaluating prediction models
-- **Apply**: use the models in some practical context: algoritm configuration, service selection, job scheduling, etc.
+##Prediction
 
-###Measure
-###Predict
-###Apply
+##Application
 
 ##To do
 - More metrics
