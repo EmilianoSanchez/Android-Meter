@@ -130,7 +130,7 @@ They are the units of code that computes a measure or feature value from some el
 - **Input metrics** compute **input features** that depends on the problem domain. For instance, in face detection on images, some input features are the image name, size, color contrast, file format, etc.  
 - **Component metrics** compute **component features** like its name, location, etc.
 - **Operation metrics** compute three kind of features:
- * **Output features**: these are characteristics of the operation result, like its size, quality, etc. Like input features, they depend on the problem domain. In face detection for instance, the output is a vector with the location of the detected features, therefore, an interesting output feature is the size of this vector, i.e., the number of detected faces.
+ * **Output features**: these are characteristics of the operation result, like its size, quality, etc. Like input features, they depend on the problem domain. In face detection for instance, the output is a vector with the location of the detected faces, therefore, an interesting output feature is the size of this vector, i.e., the amount of detected faces.
  * **Dynamic context features**: this are characteristics of the execution environment that may vary from operation to operation, like the CPU usage, number of runnning processes, connection type, device location, etc.
  * **Performance features**: this are the performance measures of interest that vary from operation to operation, like response time, consumed battery, operation executed with error or not, etc. 
 
@@ -143,6 +143,8 @@ It is the object that stores the measured data and exports it into a CSV file fo
 
 ##To do
 - More metrics
+- Export results into several files: SQLite, CVSs, etc.
+- Store results in a DaaS (Firebase for example)
 - Load simulation
 - Incremental prediction models in Android
 - Distributed prediction models in Android
