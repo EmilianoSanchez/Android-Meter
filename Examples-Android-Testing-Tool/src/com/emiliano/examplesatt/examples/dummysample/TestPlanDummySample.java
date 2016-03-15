@@ -19,7 +19,7 @@ public class TestPlanDummySample extends TestPlan<Integer[], Integer> {
 
 		// this.addOperationMetrics(new
 		// MeasurerTestPlanName<Integer[],Integer>());
-		this.addOperationMetrics(new ResponseTimeMetric<Integer[], Integer>());
+		this.addOperationMetrics(new ResponseTimeMetric());
 		// this.addOperationMetrics(new MeasureOperationResult());
 	}
 

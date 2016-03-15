@@ -31,7 +31,6 @@ import com.emiliano.androidTestTool.core.Executor;
 import com.emiliano.androidTestTool.core.ExecutorListener;
 import com.emiliano.androidTestTool.core.Results;
 import com.emiliano.androidTestTool.core.TestPlan;
-import com.opencsv.CSVWriter;
 
 public abstract class TestToolActivity<Input, Output> extends Activity implements ExecutorListener {
 
@@ -61,14 +60,9 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 	public void saveResults(View view) {
 		Log.i("BlackBox", "Saving data...");
 		if (results != null) {
-//			List<Map<String, Object>> operationResults = this.results.getOperationResults();
-			List<Map<String, Object>> desnormalizedResults = this.results.getDesnormalizedResults();
-			if (desnormalizedResults != null && desnormalizedResults.size() > 0) {
-				
 				try {
 					File file = getFilePath();
-//					saveFileCSVWriter(file,desnormalizedResults);		
-					saveFile(file,desnormalizedResults);
+					results.saveToCSV(file);
 					
 					AlertDialog dialog = new AlertDialog.Builder(this)
 							.setMessage("Results were saved in " + file.getAbsolutePath()).setTitle("Results saved")
@@ -84,94 +78,21 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 					AlertDialog dialog = new AlertDialog.Builder(this).setMessage(e.getMessage())
 							.setTitle("Error saving results")
 							.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									dialog.dismiss();
 								}
 							}).create();
 					dialog.show();
-					// Log.e("BlackBox", e.getMessage());
-				}
+				} 
 			}
-		}
-//		this.findViewById(R.id.saveResults).setEnabled(false);
-	}
-
-	private void saveFile(File file, List<Map<String, Object>> desnormalizedResults) throws IOException {
-		FileOutputStream writer = null;
-		writer = new FileOutputStream(file);
-		Map<String, Object> operationResult = desnormalizedResults.get(0);
-		
-		writer.write("OperationID".getBytes());
-		for (String header : operationResult.keySet()) {
-			writer.write( ";".getBytes());
-			writer.write( header.getBytes());
-		}
-		writer.write("\n".getBytes());
-
-		for (int i = 0; i < desnormalizedResults.size(); i++) {
-			Map<String, Object> oper = desnormalizedResults.get(i);
-			writer.write(Integer.toString(i).getBytes());
-			for (Object object : oper.values()) {
-				writer.write( ";".getBytes());
-				writer.write(object.toString().getBytes());
-			}
-			writer.write("\n".getBytes());
-		}
-		writer.flush();
-		writer.close();
-	}
-	
-	private void saveFileCSVWriter(File file, List<Map<String, Object>> desnormalizedResults) throws IOException {
-		CSVWriter writer = null;
-		writer = new CSVWriter(new FileWriter(file),';');
-
-		Map<String, Object> operationResult = desnormalizedResults.get(0);
-		String[] headers = new String[operationResult.size()];
-		headers[0] = "OperationID";
-		int pos = 1;
-		for (String header : operationResult.keySet()) {
-			headers[pos] = header;
-			pos++;
-		}
-		writer.writeNext(headers);
-
-		for (int i = 0; i < desnormalizedResults.size(); i++) {
-			Map<String, Object> oper = desnormalizedResults.get(i);
-			String[] head = new String[headers.length];
-			head[0] = Integer.toString(i);
-			int po = 1;
-			for (Object object : oper.values()) {
-				head[po] = object.toString();
-				po++;
-			}
-			writer.writeNext(head);
-		}
-		writer.flush();
-		writer.close();
 	}
 
 	protected File getFilePath() throws IOException {
 		String externalDir = Environment.getExternalStorageDirectory().getAbsolutePath();
 		if (externalDir == null)
 			throw new IOException("No external storage available");
-		return new File(externalDir + "/"+getFileName() + ".csv");
-		
-//		File file;
-//		int number = 0;
-//		do {
-//			number++;
-//			// file=new
-//			// File(externalDir.getAbsolutePath()+"/results"+number+".csv");
-//			file = new File(externalDir + "/results" + number + ".csv");
-//			Log.i("BlackBox", file.getAbsolutePath());
-//		} while (file.exists());
-//		return file;
-	}
-	
-	protected String getFileName(){
-		return "results";
+		return new File(externalDir + "/"+results.getTestPlan().getName() + ".csv");
 	}
 
 	@Override
@@ -194,7 +115,7 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 		saveResults.setEnabled(true);
 	}
 
-	private static class ResultsAdapter extends BaseAdapter {
+	public static class ResultsAdapter extends BaseAdapter {
 
 		private List<Map<String, Object>> operationResults;
 

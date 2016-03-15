@@ -41,7 +41,7 @@ public class Executor<Input, Output> extends
 		Results results=new Results(testPlan);
 		
 		Map<String, Object> testPlanResults = testPlan.getGlobalMetrics().calculate(testPlan);
-		results.addTestPlanResult(testPlanResults);
+		results.addGlobalMeasure(testPlanResults);
 
 		int currentOperation = 0;
 		int totalOperations = testPlan.getInputs().size()
@@ -54,14 +54,14 @@ public class Executor<Input, Output> extends
 			inputId++;
 			
 			Map<String, Object> inputResults = testPlan.getInputMetrics().calculate(input);
-			results.addInputResult(inputId,inputResults);
+			results.addInputMeasure(inputId,inputResults);
 			
 			for (Component<Input, Output> component : testPlan.getComponents()) {
 				componentId++;
 				
 				if(inputId==0){
 					Map<String, Object> componentResults = testPlan.getComponentMetrics().calculate(component);
-					results.addComponentResult(componentId,componentResults);
+					results.addComponentMeasure(componentId,componentResults);
 				}
 				
 				currentOperation++;
@@ -75,7 +75,7 @@ public class Executor<Input, Output> extends
 
 					Map<String, Object> operationResults = testPlan.getOperationMetrics().calculate(output);
 
-					results.addOperationResult(inputId,componentId,executionId,operationResults);
+					results.addOperationMeasure(inputId,componentId,executionId,operationResults);
 					
 					if(testPlan.getDelayBetweenOperations()>0){
 						synchronized (this) {

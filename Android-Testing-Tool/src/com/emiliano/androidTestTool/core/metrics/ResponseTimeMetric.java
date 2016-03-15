@@ -1,7 +1,5 @@
 package com.emiliano.androidTestTool.core.metrics;
 
-import java.util.Map;
-
 import com.emiliano.androidTestTool.core.components.Component;
 
 public class ResponseTimeMetric<Input,Output> implements OperationMetric<Input,Output>{
@@ -47,5 +45,8 @@ public class ResponseTimeMetric<Input,Output> implements OperationMetric<Input,O
 	public void beforeOperation(Input input, Component<Input, Output> component) {
 		this.initialNanoTime=System.nanoTime();
 	}
-
+	
+	public void beforeOperation() {
+		this.beforeOperation(null,null);
+	}
 }
