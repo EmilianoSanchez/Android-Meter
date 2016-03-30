@@ -101,7 +101,7 @@ public class Results {
 		writer = new CSVWriter(new FileWriter(file), ';');
 		if (desnormalizedResults.size() > 0) {
 			Map<String, Object> operationResult = desnormalizedResults.get(0);
-			String[] headers = new String[operationResult.size()];
+			String[] headers = new String[operationResult.size()+1];
 			headers[0] = "OperationID";
 			int pos = 1;
 			for (String header : operationResult.keySet()) {
@@ -112,14 +112,14 @@ public class Results {
 
 			for (int i = 0; i < desnormalizedResults.size(); i++) {
 				Map<String, Object> oper = desnormalizedResults.get(i);
-				String[] head = new String[headers.length];
-				head[0] = Integer.toString(i);
+				String[] tupla = new String[headers.length];
+				tupla[0] = Integer.toString(i);
 				int po = 1;
 				for (Object object : oper.values()) {
-					head[po] = object.toString();
+					tupla[po] = object.toString();
 					po++;
 				}
-				writer.writeNext(head);
+				writer.writeNext(tupla);
 			}
 		}
 		writer.flush();

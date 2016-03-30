@@ -1,5 +1,6 @@
 package com.emiliano.androidTestTool.core.metrics.dynamicContext;
 
+import com.emiliano.androidTestTool.core.TestPlan;
 import com.emiliano.androidTestTool.core.components.Component;
 import com.emiliano.androidTestTool.core.metrics.OperationMetric;
 import com.emiliano.androidTestTool.core.metrics.staticContext.MemSize;
@@ -15,10 +16,10 @@ public class MemUsage <Input, Output> implements OperationMetric<Input, Output> 
 	double percentAvail;
 	long totalMem;
 
-	public MemUsage(Context context) {
+	public MemUsage(TestPlan<Input, Output> testPlan) {
 		mi = new MemoryInfo();
-		activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-		totalMem=new MemSize().calculate(context);
+		activityManager = (ActivityManager) testPlan.getAndroidContext().getSystemService(Context.ACTIVITY_SERVICE);
+		totalMem=new MemSize().calculate(testPlan);
 	}
 
 	@Override

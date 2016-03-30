@@ -1,11 +1,13 @@
 package com.emiliano.androidTestTool.core.metrics.staticContext;
 
+import com.emiliano.androidTestTool.context.DeviceModel;
+import com.emiliano.androidTestTool.context.DeviceModel.ModelEnum;
+import com.emiliano.androidTestTool.core.TestPlan;
 import com.emiliano.androidTestTool.core.metrics.Metric;
-import com.emiliano.androidTestTool.core.metrics.staticContext.DeviceModel.Model;
 
 import android.content.Context;
 
-public class CpuArchitecture implements Metric<Context> {
+public class CpuArchitecture<Input, Output> implements Metric<TestPlan<Input, Output>> {
 
 	public static enum Architecture {
 		ARMv7,AArch64
@@ -14,10 +16,10 @@ public class CpuArchitecture implements Metric<Context> {
 	private static Architecture[] mapping;
 	
 	static{
-		mapping=new Architecture[Model.values().length];
-		mapping[Model.Lenovo_K50_T5.ordinal()]=Architecture.AArch64;
-		mapping[Model.GT_I9300.ordinal()]=Architecture.ARMv7;
-		mapping[Model.C2104.ordinal()]=Architecture.ARMv7;
+		mapping=new Architecture[ModelEnum.values().length];
+		mapping[ModelEnum.Lenovo_K50_T5.ordinal()]=Architecture.AArch64;
+		mapping[ModelEnum.GT_I9300.ordinal()]=Architecture.ARMv7;
+		mapping[ModelEnum.C2104.ordinal()]=Architecture.ARMv7;
 	}
 	
 	@Override
@@ -26,8 +28,8 @@ public class CpuArchitecture implements Metric<Context> {
 	}
 
 	@Override
-	public Architecture calculate(Context element) {
-		Model model=(Model)(new DeviceModel().calculate(element));
+	public Architecture calculate(TestPlan<Input, Output> element) {
+		ModelEnum model=new DeviceModel().getDeviceModelEnum();
 		return mapping[model.ordinal()];
 	}
 

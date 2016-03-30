@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
+import android.media.tv.TvContract.Programs;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -28,32 +29,33 @@ import android.widget.TextView;
 
 import com.emiliano.androidTestTool.R;
 import com.emiliano.androidTestTool.core.Executor;
-import com.emiliano.androidTestTool.core.ExecutorListener;
+import com.emiliano.androidTestTool.core.Executor.ExecutorListener;
+import com.emiliano.androidTestTool.core.ExecutorImpl;
 import com.emiliano.androidTestTool.core.Results;
 import com.emiliano.androidTestTool.core.TestPlan;
 
 public abstract class TestToolActivity<Input, Output> extends Activity implements ExecutorListener {
 
-	ProgressDialog progressDialog;
-	ListView listView;
-	Results results;
+	
+	protected ListView listView;
+	protected Results results;
+	protected ProgressDialog progressDialog;
 
-	protected abstract TestPlan<Input, Output> getPlan();
+	protected abstract TestPlan<Input, Output> getTestPlan();
+	protected Executor<Input, Output> getExecutor(ExecutorListener listener){
+		return new ExecutorImpl<Input, Output>(listener);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.test_tool_activity);
-
-		progressDialog = new ProgressDialog(this);
-		progressDialog.setTitle("Test plan progress");
-
 		listView = (ListView) this.findViewById(R.id.listView);
 	}
 
 	public void executePlan(View view) {
-		Executor<Input, Output> executor = new Executor<Input, Output>(this, this);
-		TestPlan<Input, Output> plan = getPlan();
+		Executor<Input, Output> executor = getExecutor(this);
+		TestPlan<Input, Output> plan = getTestPlan();
 		executor.execute(plan);
 	}
 
@@ -97,6 +99,8 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 
 	@Override
 	public void onTestPlanStarted() {
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setTitle("Test plan progress");
 		progressDialog.setMessage("Starting test plan");
 		progressDialog.show();
 	}
@@ -110,6 +114,7 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 	public void onTestPlanFinished(Results allResults[]) {
 		this.results = allResults[0];
 		progressDialog.dismiss();
+		progressDialog=null;
 		listView.setAdapter(new ResultsAdapter(results.getDesnormalizedResults()));
 		Button saveResults = (Button) this.findViewById(R.id.saveResults);
 		saveResults.setEnabled(true);
