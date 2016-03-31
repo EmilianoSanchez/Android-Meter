@@ -1,11 +1,11 @@
 package com.emiliano.examplesatt.examples.dummysample;
 
-import com.emiliano.androidTestTool.core.TestPlan;
-import com.emiliano.androidTestTool.core.metrics.ResponseTimeMetric;
+import com.emiliano.androidTestTool.core.TestPlanImpl;
+import com.emiliano.androidTestTool.core.metrics.operation.ResponseTimeMetric;
 
 import android.content.Context;
 
-public class TestPlanDummySample extends TestPlan<Integer[], Integer> {
+public class TestPlanDummySample extends TestPlanImpl<Integer[], Integer> {
 
 	public TestPlanDummySample(Context context) {
 		super("Test plan dummy sample",context);

@@ -4,5 +4,5 @@ public interface Metric<Element> {
 	
 	public String getName();
 	
-	public abstract Object calculate(Element element);
+	public Object calculate(Element element);
 }

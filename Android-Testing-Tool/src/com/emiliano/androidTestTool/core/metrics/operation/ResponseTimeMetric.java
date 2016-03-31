@@ -1,6 +1,7 @@
-package com.emiliano.androidTestTool.core.metrics;
+package com.emiliano.androidTestTool.core.metrics.operation;
 
 import com.emiliano.androidTestTool.core.components.Component;
+import com.emiliano.androidTestTool.core.metrics.OperationMetric;
 
 public class ResponseTimeMetric<Input,Output> implements OperationMetric<Input,Output>{
 
@@ -32,14 +33,15 @@ public class ResponseTimeMetric<Input,Output> implements OperationMetric<Input,O
 	}
 	
 	@Override
-	public Object calculate(Output element) {
-		return (double)(System.nanoTime()-initialNanoTime)/multiplier;
+	public Double calculate(Output element) {
+		double rTime= (double)(System.nanoTime()-initialNanoTime)/multiplier;
+		return rTime;
 	}
-
-	@Override
-	public String getName() {
-		return "Response time (in "+timeUnit.name()+")";
-	}
+	
+	public static final String METRIC_NAME="Response time";
+	
+	private static final String[] METRIC_NAMES=new String[]{"Response time (in seconds)","Response time (in milliseconds)","Response time (in microseconds)",
+			"Response time (in nanoseconds)"};
 
 	@Override
 	public void beforeOperation(Input input, Component<Input, Output> component) {
@@ -48,5 +50,10 @@ public class ResponseTimeMetric<Input,Output> implements OperationMetric<Input,O
 	
 	public void beforeOperation() {
 		this.beforeOperation(null,null);
+	}
+	
+	@Override
+	public String getName() {
+		return METRIC_NAMES[timeUnit.ordinal()];
 	}
 }

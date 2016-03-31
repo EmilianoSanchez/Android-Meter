@@ -6,12 +6,8 @@ import com.emiliano.androidTestTool.utils.TestToolActivity;
 public class ActivityKnapsackProblem  extends TestToolActivity<KnapsackInstance,KnapsackSolution>{
 
 	@Override
-	protected TestPlan<KnapsackInstance,KnapsackSolution> getPlan() {
+	protected TestPlan<KnapsackInstance,KnapsackSolution> getTestPlan() {
 		return new TestPlanKnapsackProblem(this);
 	}
-	
-	@Override
-	protected String getFileName() {
-		return "Knapsack Problem";
-	}
+
 }

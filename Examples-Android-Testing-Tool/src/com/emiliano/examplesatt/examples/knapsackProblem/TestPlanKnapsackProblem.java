@@ -1,12 +1,12 @@
 package com.emiliano.examplesatt.examples.knapsackProblem;
 
-import com.emiliano.androidTestTool.core.TestPlan;
-import com.emiliano.androidTestTool.core.metrics.ComponentNameMetric;
-import com.emiliano.androidTestTool.core.metrics.ResponseTimeMetric;
+import com.emiliano.androidTestTool.core.TestPlanImpl;
+import com.emiliano.androidTestTool.core.metrics.component.ComponentName;
+import com.emiliano.androidTestTool.core.metrics.operation.ResponseTimeMetric;
 
 import android.content.Context;
 
-public class TestPlanKnapsackProblem extends TestPlan<KnapsackInstance,KnapsackSolution>{
+public class TestPlanKnapsackProblem extends TestPlanImpl<KnapsackInstance,KnapsackSolution>{
 	
 	@SuppressWarnings("unchecked")
 	public TestPlanKnapsackProblem(Context context) {
@@ -34,7 +34,7 @@ public class TestPlanKnapsackProblem extends TestPlan<KnapsackInstance,KnapsackS
 		// this.addContextMetrics(new MemSize());
 	
 		// Component metrics
-		this.addComponentMetrics(new ComponentNameMetric());
+		this.addComponentMetrics(new ComponentName());
 	
 		// Input metrics
 		this.addInputMetrics(new NumItemsMetric());

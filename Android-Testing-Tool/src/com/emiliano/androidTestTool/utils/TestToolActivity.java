@@ -1,20 +1,22 @@
 package com.emiliano.androidTestTool.utils;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.emiliano.androidTestTool.R;
+import com.emiliano.androidTestTool.core.Executor;
+import com.emiliano.androidTestTool.core.Results;
+import com.emiliano.androidTestTool.core.TestPlan;
+import com.emiliano.androidTestTool.core.Executor.ExecutorListener;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
-import android.media.tv.TvContract.Programs;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -27,13 +29,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.emiliano.androidTestTool.R;
-import com.emiliano.androidTestTool.core.Executor;
-import com.emiliano.androidTestTool.core.Executor.ExecutorListener;
-import com.emiliano.androidTestTool.core.ExecutorImpl;
-import com.emiliano.androidTestTool.core.Results;
-import com.emiliano.androidTestTool.core.TestPlan;
-
 public abstract class TestToolActivity<Input, Output> extends Activity implements ExecutorListener {
 
 	
@@ -43,7 +38,7 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 
 	protected abstract TestPlan<Input, Output> getTestPlan();
 	protected Executor<Input, Output> getExecutor(ExecutorListener listener){
-		return new ExecutorImpl<Input, Output>(listener);
+		return new Executor<Input, Output>(listener);
 	}
 
 	@Override
@@ -64,7 +59,7 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 		if (results != null) {
 				try {
 					File file = getFilePath();
-					results.saveToCSV(file);
+					ResultsUtils.saveToCSV(results,file);
 					
 					AlertDialog dialog = new AlertDialog.Builder(this)
 							.setMessage("Results were saved in " + file.getAbsolutePath()).setTitle("Results saved")
@@ -98,7 +93,7 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 	}
 
 	@Override
-	public void onTestPlanStarted() {
+	public void onPreExecute() {
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setTitle("Test plan progress");
 		progressDialog.setMessage("Starting test plan");
@@ -106,16 +101,16 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 	}
 
 	@Override
-	public void onProgressUpdate(String progress) {
-		progressDialog.setMessage(progress);
+	public void onProgressUpdate(String... progress) {
+		progressDialog.setMessage(progress[0]);
 	}
 
 	@Override
-	public void onTestPlanFinished(Results allResults[]) {
+	public void onPostExecute(Results allResults[]) {
 		this.results = allResults[0];
 		progressDialog.dismiss();
 		progressDialog=null;
-		listView.setAdapter(new ResultsAdapter(results.getDesnormalizedResults()));
+		listView.setAdapter(new ResultsAdapter(ResultsUtils.getDesnormalizedResults(results)));
 		Button saveResults = (Button) this.findViewById(R.id.saveResults);
 		saveResults.setEnabled(true);
 	}

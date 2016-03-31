@@ -1,12 +1,12 @@
 package com.emiliano.examplesatt.examples.matrix;
 
-import com.emiliano.androidTestTool.core.TestPlan;
-import com.emiliano.androidTestTool.core.metrics.ComponentNameMetric;
-import com.emiliano.androidTestTool.core.metrics.ResponseTimeMetric;
+import com.emiliano.androidTestTool.core.TestPlanImpl;
+import com.emiliano.androidTestTool.core.metrics.component.ComponentName;
+import com.emiliano.androidTestTool.core.metrics.operation.ResponseTimeMetric;
 
 import android.content.Context;
 
-public class TestPlanMatrix extends TestPlan<MatrixPair, double[][]> {
+public class TestPlanMatrix extends TestPlanImpl<MatrixPair, double[][]> {
 
 	public static final int INPUT_SAMPLES = 20;
 
@@ -46,7 +46,7 @@ public class TestPlanMatrix extends TestPlan<MatrixPair, double[][]> {
 		// this.addContextMetrics(new MemSize());
 
 		// Component metrics
-		this.addComponentMetrics(new ComponentNameMetric());
+		this.addComponentMetrics(new ComponentName());
 
 		// Input metrics
 		this.addInputMetrics(new ARowsMetric());

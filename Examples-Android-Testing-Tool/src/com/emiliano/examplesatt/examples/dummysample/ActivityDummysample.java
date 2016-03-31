@@ -6,12 +6,8 @@ import com.emiliano.androidTestTool.utils.TestToolActivity;
 public class ActivityDummysample   extends TestToolActivity<Integer[], Integer>{
 
 	@Override
-	protected TestPlan<Integer[], Integer> getPlan() {
+	protected TestPlan<Integer[], Integer> getTestPlan() {
 		return new TestPlanDummySample(this);
 	}
-	
-	@Override
-	protected String getFileName() {
-		return "Dummy sample";
-	}
+
 }

@@ -6,12 +6,8 @@ import com.emiliano.androidTestTool.utils.TestToolActivity;
 public class ActivityMatrix extends TestToolActivity<MatrixPair,double[][]>{
 
 	@Override
-	protected TestPlan<MatrixPair,double[][]> getPlan() {
+	protected TestPlan<MatrixPair,double[][]> getTestPlan() {
 		return new TestPlanMatrix(this);
 	}
-	
-	@Override
-	protected String getFileName() {
-		return "Matrix multiplication";
-	}
+
 }
