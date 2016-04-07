@@ -23,7 +23,7 @@ To have some insight of their performance, machine learning techniques over empi
 
 This method focus on the following properties:
  - **Response time**: it is the total amount of time that a component takes to perform a task or **operation**, i.e. to respond to a request with a given input. A response time model over a component **C** is defined as a function **Rc(E,I)=r**, being **E** a set of measured execution context features **E=[E1,...Ee]** (like CPU cores, Network type, etc), **I** a set of measured input parameter features **I=[I1,...Ii]** (input size in bytes, etc), and **r** the estimated response time.
- - **Accuracy**: it is a measure of the quality of the component output results. It has different meanings depending on the required functionality. For instance, in classification problems, it is the statistical measure of how well a classifier, like a face detector, correctly identifies or excludes a condition. In optimization problems, it is also known as Optimality and is usually measured as a ratio between the obteined output solution and the optimal known solution. In most cases, accuracy do not depends on execution context features, in contrast to response time. Therefore, an accuracy model over a component **C** is defined as a function **Ac(I)=a**, being  **I** a set of measured input parameter features **I=[I1,...Ii]**, and **a** the estimated accuracy.
+ - **Accuracy**: it is a measure of the quality of the component output results. It has different meanings depending on the required functionality. For instance, in classification problems, it is the statistical measure of how well a classifier, like a face detector, correctly identifies or excludes a condition. In optimization problems, it is also known as Optimality and is usually measured as a ratio between the obteined output solution value and the optimal known value. In most cases, accuracy do not depends on execution context features, in contrast to response time. Therefore, an accuracy model over a component **C** is defined as a function **Ac(I)=a**, being  **I** a set of measured input parameter features **I=[I1,...Ii]**, and **a** the estimated accuracy.
 
 Such models are known as **empirical performance models** (EPM), and are useful in a variety of practical contexts:
  - Algoritm selection and configuration: performance models can be used to dynamically select the best from a given set
@@ -45,7 +45,7 @@ The method consist of the following activities:
 
 The testing activity is supported by the [Android Testing Tool](https://github.com/EmilianoSanchez/Android-Performance-Testing-and-Prediction/tree/master/Android-Testing-Tool) (ATT). It is an Android library that automatically performs test plans, i.e., a systemathic execution and measure of component operations with a set of inputs and varying execution conditions. 
 
-ATT use examples are included in the following Android application projects:
+Examples using ATT are included in the following Android application projects:
 - [Examples-Android-Testing-Tool](https://github.com/EmilianoSanchez/Android-Performance-Testing-and-Prediction/tree/master/Examples-Android-Testing-Tool): it includes basic testing examples in domains like matrix multiplication and algoritms for solving the Knapsack problem. 
 - [Evaluation-of-Face-Detection-Services](https://github.com/EmilianoSanchez/Android-Performance-Testing-and-Prediction/tree/master/Evaluation-of-Face-Detection-Services): it extends ATT for testing Android Services and Web Services that perform face detection over images.
 
@@ -102,7 +102,7 @@ An **Executor** object executes the test plans and stores the measured values on
 ```java
 class Executor {
 	...
-	Result executeTestPlan(TestPlan testPlan){
+	Results executeTestPlan(TestPlan testPlan){
 		Results results=new Results();
 		for(GlobalMetric m : testPlan.getGlobalMetrics())
 			results.addGlobalMeasure(m.calculate(testPlan));
@@ -120,7 +120,7 @@ class Executor {
 				for(OperationMetric m : testPlan.getOperationMetrics())
 					results.addOperationMeasure(m.calculate(o));
 			}
-		return Results;
+		return results;
 	}
 }
 ```
@@ -130,7 +130,7 @@ They are the units of code that computes a measure or feature value from some el
 - **Input metrics** compute **input features** that depends on the problem domain. For instance, in face detection on images, some input features are the image name, size, color contrast, file format, etc.  
 - **Component metrics** compute **component features** like its name, location, etc.
 - **Operation metrics** compute three kind of features:
- * **Output features**: these are characteristics of the operation result, like its size, quality, etc. Like input features, they depend on the problem domain. In face detection for instance, the output is a vector with the location of the detected features, therefore, an interesting output feature is the size of this vector, i.e., the number of detected faces.
+ * **Output features**: these are characteristics of the operation result, like its size, quality, etc. Like input features, they depend on the problem domain. In face detection for instance, the output is a vector with the location of the detected faces, therefore, an interesting output feature is the size of this vector, i.e., the amount of detected faces.
  * **Dynamic context features**: this are characteristics of the execution environment that may vary from operation to operation, like the CPU usage, number of runnning processes, connection type, device location, etc.
  * **Performance features**: this are the performance measures of interest that vary from operation to operation, like response time, consumed battery, operation executed with error or not, etc. 
 
@@ -143,6 +143,8 @@ It is the object that stores the measured data and exports it into a CSV file fo
 
 ##To do
 - More metrics
+- Export results into several files: SQLite, CVSs, etc.
+- Store results in a DaaS (Firebase for example)
 - Load simulation
 - Incremental prediction models in Android
 - Distributed prediction models in Android
