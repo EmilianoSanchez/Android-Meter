@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.util.Log;
+
 public class ResultsImpl<Input,Output> implements Results<Input,Output>{
 
 	private TestPlan<Input,Output> testPlan;
@@ -23,21 +25,22 @@ public class ResultsImpl<Input,Output> implements Results<Input,Output>{
 		
 		this.inputMeasures = new ArrayList<Map<String, Object>>(numberOfInputs);
 		for(int i=0;i<numberOfInputs;i++)
-			this.inputMeasures.set(i, new HashMap<String, Object>());
+			this.inputMeasures.add(new HashMap<String, Object>());
 		
 		this.componentMeasures = new ArrayList<Map<String, Object>>(numberOfComponents);
-		for(int c=0;c<numberOfInputs;c++)
-			this.componentMeasures.set(c, new HashMap<String, Object>());
+		for(int c=0;c<numberOfComponents;c++)
+			this.componentMeasures.add(new HashMap<String, Object>());
 			
 		this.operationMeasures = new ArrayList<List<Map<String, Object>>>(numberOfInputs);
 		for(int i=0;i<numberOfInputs;i++){
-			this.operationMeasures.set(i, new ArrayList<Map<String, Object>>(numberOfComponents));
-			for(int c=0;c<numberOfInputs;c++)
-				this.operationMeasures.get(i).set(c, new HashMap<String, Object>());
+			List<Map<String, Object>> aux=new ArrayList<Map<String, Object>>(numberOfComponents);
+			for(int c=0;c<numberOfComponents;c++)
+				aux.add(new HashMap<String, Object>());
+			this.operationMeasures.add(aux);
 		}
 	}
 
-	public TestPlan getTestPlan() {
+	public TestPlan<Input,Output> getTestPlan() {
 		return this.testPlan;
 	}
 
@@ -90,7 +93,7 @@ public class ResultsImpl<Input,Output> implements Results<Input,Output>{
 	}
 	
 	public void addComponentMeasure(int componentIndex, String name, Object value) {
-		componentMeasures.get(componentIndex).put(name,value);
+		this.componentMeasures.get(componentIndex).put(name,value);
 	}
 
 	public void addOperationMeasures(int inputIndex, int componentIndex,

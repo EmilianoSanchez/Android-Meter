@@ -14,7 +14,7 @@ public class TestPlanKnapsackProblem extends TestPlanImpl<KnapsackInstance,Knaps
 		this.addComponents(new GreedyAlgorithm());
 		this.addComponents(new BacktrackingAlgorithm());
 	
-		int numItems[]=new int[]{5,10,15,20,25,30};
+		int numItems[]=new int[]{2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
 		double weightRatios[]=new double[]{0.1,0.3,0.5,0.7,0.9};
 		for (int i = 0; i < numItems.length; i++) {
 			for (int j = 0; j < weightRatios.length; j++) {

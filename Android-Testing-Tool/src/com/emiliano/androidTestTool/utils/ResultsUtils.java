@@ -12,6 +12,8 @@ import java.util.TreeMap;
 import com.emiliano.androidTestTool.core.Results;
 import com.opencsv.CSVWriter;
 
+import android.util.Log;
+
 public class ResultsUtils {
 
 	public static void saveToCSV(Results results, File file) throws IOException {
@@ -51,6 +53,7 @@ public class ResultsUtils {
 		Map<String, Object> globalMeasures = results.getGlobalMeasures();
 		
 		List<Map<String, Object>> inputMeasures=results.getInputMeasures();
+		
 		for (int i=0;i< inputMeasures.size();i++) {
 			List<Map<String, Object>> componentMeasures=results.getComponentMeasures();
 			for (int c=0;c< componentMeasures.size();c++) {
