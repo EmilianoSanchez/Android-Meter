@@ -22,17 +22,6 @@ public class TestPlanKnapsackProblem extends TestPlanImpl<KnapsackInstance,Knaps
 			}
 		}
 	
-		// Static context metrics
-		// this.addContextMetrics(new Cpu2dMark());
-		// this.addContextMetrics(new Cpu3dMark());
-		// this.addContextMetrics(new CpuArchitecture());
-		// this.addContextMetrics(new CpuCores());
-		// this.addContextMetrics(new CpuMark());
-		// this.addContextMetrics(new DeviceModel());
-		// this.addContextMetrics(new DiskMark());
-		// this.addContextMetrics(new MemMark());
-		// this.addContextMetrics(new MemSize());
-	
 		// Component metrics
 		this.addComponentMetrics(new ComponentName());
 	
