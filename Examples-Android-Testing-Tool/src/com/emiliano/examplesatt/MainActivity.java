@@ -12,8 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-
-public class MainActivity extends ListActivity{
+public class MainActivity extends ListActivity {
 	class ItemVo {
 		public String filename;
 		public Class<?> cls;
@@ -27,20 +26,17 @@ public class MainActivity extends ListActivity{
 	}
 
 	private ItemVo[] _items = {
-//			new ItemVo("Dummy example", ActivityDummysample.class,
-//					"ActivityDummysample.java"),
-			new ItemVo("Matrix multiplication example", ActivityMatrix.class,
-					"ActivityMatrix.java"),
-			new ItemVo("Knapsack problem example",
-					ActivityKnapsackProblem.class,
-					"ActivityKnapsackProblem.java") };
+			// new ItemVo("Dummy example", ActivityDummysample.class,
+			// "ActivityDummysample.java"),
+			new ItemVo("Matrix multiplication example", ActivityMatrix.class, "ActivityMatrix.java"),
+			new ItemVo("Knapsack problem example", ActivityKnapsackProblem.class, "ActivityKnapsackProblem.java") };
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		String manufacturer=Build.MANUFACTURER;
-		String model=Build.MODEL;
-		Toast.makeText(this, manufacturer+" "+model, 3).show();
-		
+		String manufacturer = Build.MANUFACTURER;
+		String model = Build.MODEL;
+		Toast.makeText(this, manufacturer + " " + model, 3).show();
+
 		String[] strings = new String[_items.length];
 		for (int i = 0; i < _items.length; i++) {
 			strings[i] = _items[i].label;
@@ -48,8 +44,7 @@ public class MainActivity extends ListActivity{
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		setListAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, strings));
+		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, strings));
 
 		registerForContextMenu(getListView());
 

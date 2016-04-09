@@ -3,10 +3,10 @@ package com.emiliano.examplesatt.examples.dummysample;
 import com.emiliano.androidTestTool.core.components.Component;
 import com.emiliano.androidTestTool.core.metrics.OperationMetric;
 
-public class MeasureOperationResult implements OperationMetric<Integer[], Integer> {
+public class MeasureOperationResult implements OperationMetric<Integer[], Integer, Integer> {
 
 	@Override
-	public Object calculate(Integer element) {
+	public Integer calculate(Integer element) {
 		return element;
 	}
 
@@ -16,7 +16,7 @@ public class MeasureOperationResult implements OperationMetric<Integer[], Intege
 	}
 
 	@Override
-	public void beforeOperation(Integer[] input, Component<Integer[], Integer> component) {
+	public void onBeforeOperation(Integer[] input, Component<Integer[], Integer> component) {
 	}
 
 }

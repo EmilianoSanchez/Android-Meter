@@ -2,15 +2,15 @@ package com.emiliano.examplesatt.examples.knapsackProblem;
 
 import com.emiliano.androidTestTool.core.metrics.Metric;
 
-public class NumItemsMetric implements Metric<KnapsackInstance>{
-	
+public class NumItemsMetric implements Metric<KnapsackInstance, Integer> {
+
 	@Override
 	public String getName() {
 		return "NumItemsMetric";
 	}
 
 	@Override
-	public Object calculate(KnapsackInstance element) {
+	public Integer calculate(KnapsackInstance element) {
 		return element.itemWeights.length;
 	}
 }

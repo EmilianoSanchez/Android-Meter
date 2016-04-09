@@ -3,10 +3,10 @@ package com.emiliano.examplesatt.examples.knapsackProblem;
 import com.emiliano.androidTestTool.core.components.Component;
 import com.emiliano.androidTestTool.core.metrics.OperationMetric;
 
-public class SolutionValueMetric implements OperationMetric<KnapsackInstance,KnapsackSolution>{
+public class SolutionValueMetric implements OperationMetric<KnapsackInstance, KnapsackSolution, Integer> {
 
 	@Override
-	public Object calculate(KnapsackSolution element) {
+	public Integer calculate(KnapsackSolution element) {
 		return element.getValue();
 	}
 
@@ -16,8 +16,7 @@ public class SolutionValueMetric implements OperationMetric<KnapsackInstance,Kna
 	}
 
 	@Override
-	public void beforeOperation(KnapsackInstance input, Component<KnapsackInstance, KnapsackSolution> component) {
-		// DO NOTHING
+	public void onBeforeOperation(KnapsackInstance input, Component<KnapsackInstance, KnapsackSolution> component) {
 	}
 
 }

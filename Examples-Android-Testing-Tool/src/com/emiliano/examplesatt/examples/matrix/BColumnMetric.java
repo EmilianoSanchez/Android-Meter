@@ -2,7 +2,7 @@ package com.emiliano.examplesatt.examples.matrix;
 
 import com.emiliano.androidTestTool.core.metrics.Metric;
 
-public class BColumnMetric implements Metric<MatrixPair> {
+public class BColumnMetric implements Metric<MatrixPair, Integer> {
 
 	@Override
 	public String getName() {
@@ -10,7 +10,7 @@ public class BColumnMetric implements Metric<MatrixPair> {
 	}
 
 	@Override
-	public Object calculate(MatrixPair element) {
+	public Integer calculate(MatrixPair element) {
 		return element.matrixB[0].length;
 	}
 

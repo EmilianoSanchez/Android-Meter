@@ -14,6 +14,10 @@ public class ResponseTimeMetric<Input, Output> implements OperationMetric<Input,
 		SECONDS, MILLISECONDS, MICROSECONDS, NANOSECONDS
 	}
 
+	public ResponseTimeMetric() {
+		this(TimeUnit.SECONDS);
+	}
+
 	public ResponseTimeMetric(TimeUnit timeUnit) {
 		this.timeUnit = timeUnit;
 		switch (timeUnit) {

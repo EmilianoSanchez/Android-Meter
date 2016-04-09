@@ -8,7 +8,7 @@ import android.content.Context;
 public class TestPlanDummySample extends TestPlanImpl<Integer[], Integer> {
 
 	public TestPlanDummySample(Context context) {
-		super("Test plan dummy sample",context);
+		super("Test plan dummy sample", context);
 		this.addComponents(new AdditionWithRandomDelayComponent(0, 500));
 		this.addComponents(new AdditionWithRandomDelayComponent(500, 1000));
 		this.addComponents(new AdditionWithRandomDelayComponent(1000, 2000));

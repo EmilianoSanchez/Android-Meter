@@ -12,27 +12,13 @@ public class TestPlanMatrix extends TestPlanImpl<MatrixPair, double[][]> {
 
 	@SuppressWarnings("unchecked")
 	public TestPlanMatrix(Context context) {
-		super("Test plan matrix multiplication",context);
+		super("Test plan matrix multiplication", context);
 		this.addComponents(new MatrixMultiplication());
 		this.addComponents(new MatrixMultiplicationMultiThread());
 
 		for (int i = 1; i < 200; i++) {
 			this.addInputs(MatrixPair.generateRandom(i, i, i));
 		}
-
-		// int sizes[]=new int[]{25,50,75,100,125,150,175,200,225,250};
-		// for(int i=0;i<sizes.length;i++){
-		// this.addInputs(MatrixPair.generateRandom(sizes[i], sizes[i],
-		// sizes[i]));
-		// }
-
-		// for(int i=0;i<INPUT_SAMPLES;i++){
-		// Random random=new Random();
-		// int aRows=random.nextInt(100)+100;
-		// int aColums=random.nextInt(100)+100;
-		// int bColums=random.nextInt(100)+100;
-		// this.addInputs(MatrixPair.generateRandom(aRows, aColums, bColums));
-		// }
 
 		// Static context metrics
 		// this.addContextMetrics(new Cpu2dMark());
@@ -50,13 +36,11 @@ public class TestPlanMatrix extends TestPlanImpl<MatrixPair, double[][]> {
 
 		// Input metrics
 		this.addInputMetrics(new ARowsMetric());
-		// this.addInputMetrics(new AColumnMetric());
-		// this.addInputMetrics(new BColumnMetric());
+		this.addInputMetrics(new AColumnMetric());
+		this.addInputMetrics(new BColumnMetric());
 
 		// Operation metrics
-		// this.addOperationMetrics(new MemFree(context));
-		// this.addOperationMetrics(new MemUsage(context));
-		this.addOperationMetrics(ResponseTimeMetric.forSeconds());
+		this.addOperationMetrics(new ResponseTimeMetric());
 	}
 
 }
