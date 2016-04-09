@@ -11,7 +11,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
 
-public class MemUsage <Input, Output> implements OperationMetric<Input, Output> {
+public class MemUsage<Input, Output> implements OperationMetric<Input, Output, Double> {
 
 	private MemoryInfo memoryInfo;
 	private ActivityManager activityManager;
@@ -21,29 +21,29 @@ public class MemUsage <Input, Output> implements OperationMetric<Input, Output> 
 	public MemUsage(Context context) {
 		memoryInfo = new MemoryInfo();
 		activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-		totalMem=(Long) StaticContextProperties.getProperty(StaticContextProperties.PropertyName.RAMcapacity);
+		totalMem = (Long) StaticContextProperties.getProperty(StaticContextProperties.PropertyName.RAMcapacity);
 	}
 
-	public static final String METRIC_NAME="Memory usage in %";
-	
+	public static final String METRIC_NAME = "Memory usage in %";
+
 	@Override
 	public Double calculate(Output element) {
-		double newPercentAvail =  1.0 - getMemUsage();
-		double memUsage=(newPercentAvail+ percentAvail)/2.0;
+		double newPercentAvail = 1.0 - getMemUsage();
+		double memUsage = (newPercentAvail + percentAvail) / 2.0;
 		return memUsage;
 	}
 
 	@Override
-	public void beforeOperation(Input input, Component<Input, Output> component) {
+	public void onBeforeOperation(Input input, Component<Input, Output> component) {
 		percentAvail = getMemUsage();
 	}
-	
+
 	private double getMemUsage() {
 		activityManager.getMemoryInfo(memoryInfo);
-		double percentAvail = 1.0 - ((memoryInfo.availMem/ 1048576L) / totalMem);
+		double percentAvail = 1.0 - ((memoryInfo.availMem / 1048576L) / totalMem);
 		return percentAvail;
 	}
-	
+
 	@Override
 	public String getName() {
 		return METRIC_NAME;

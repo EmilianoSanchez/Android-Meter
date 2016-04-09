@@ -9,11 +9,10 @@ public class BatteryManager {
 
 	private List<OnBatteryStateChangeListener> listeners;
 	private android.os.BatteryManager batteryManager;
-	
 
 	public BatteryManager(Context androidContext) {
 		this.listeners = new LinkedList<OnBatteryStateChangeListener>();
-		
+
 		this.batteryManager = (android.os.BatteryManager) androidContext.getSystemService(Context.BATTERY_SERVICE);
 	}
 

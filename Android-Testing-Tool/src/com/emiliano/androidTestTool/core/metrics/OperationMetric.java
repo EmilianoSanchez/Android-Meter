@@ -2,7 +2,7 @@ package com.emiliano.androidTestTool.core.metrics;
 
 import com.emiliano.androidTestTool.core.components.Component;
 
-public interface OperationMetric<Input,Output> extends Metric<Output>{
+public interface OperationMetric<Input, Output, Measure> extends Metric<Output, Measure> {
 
-	public abstract void beforeOperation(Input input,Component<Input,Output> component);
+	void onBeforeOperation(Input input, Component<Input, Output> component);
 }

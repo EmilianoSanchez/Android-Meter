@@ -1,8 +1,10 @@
 package com.emiliano.androidTestTool.core.metrics;
 
-public interface Metric<Element> {
-	
-	public String getName();
-	
-	public Object calculate(Element element);
+import java.util.Map;
+
+public interface Metric<Element, Measure> {
+
+	String getName();
+
+	Measure calculate(Element element);
 }

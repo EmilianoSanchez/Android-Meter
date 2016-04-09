@@ -11,35 +11,35 @@ import com.emiliano.androidTestTool.core.metrics.OperationMetric;
 
 import android.content.Context;
 
-public class TestPlanImpl<Input, Output> implements TestPlan<Input, Output>{
+public class TestPlanImpl<Input, Output> implements TestPlan<Input, Output> {
 
 	private long delayBetweenOperations = 0;
-	
+
 	private String name;
-	
+
 	private Context context;
 
 	private List<Input> inputs;
 
 	private List<Component<Input, Output>> components;
-	
-	private Collection<Metric<TestPlan<Input, Output>>> globalMetrics;
 
-	private Collection<Metric<Input>> inputMetrics;
+	private Collection<Metric<TestPlan<Input, Output>, ?>> globalMetrics;
 
-	private Collection<Metric<Component<Input, Output>>> componentMetrics;
+	private Collection<Metric<Input, ?>> inputMetrics;
 
-	private Collection<OperationMetric<Input, Output>> operationMetrics;
+	private Collection<Metric<Component<Input, Output>, ?>> componentMetrics;
 
-	public TestPlanImpl(String name,Context context) {
-		this.name=name;
-		this.context=context;
+	private Collection<OperationMetric<Input, Output, ?>> operationMetrics;
+
+	public TestPlanImpl(String name, Context context) {
+		this.name = name;
+		this.context = context;
 		this.inputs = new LinkedList<Input>();
 		this.components = new LinkedList<Component<Input, Output>>();
-		this.globalMetrics = new LinkedList<Metric<TestPlan<Input, Output>>>();
-		this.inputMetrics = new LinkedList<Metric<Input>>();
-		this.componentMetrics = new LinkedList<Metric<Component<Input, Output>>>();
-		this.operationMetrics = new LinkedList<OperationMetric<Input, Output>>();
+		this.globalMetrics = new LinkedList<Metric<TestPlan<Input, Output>, ?>>();
+		this.inputMetrics = new LinkedList<Metric<Input, ?>>();
+		this.componentMetrics = new LinkedList<Metric<Component<Input, Output>, ?>>();
+		this.operationMetrics = new LinkedList<OperationMetric<Input, Output, ?>>();
 	}
 
 	public String getName() {
@@ -62,55 +62,55 @@ public class TestPlanImpl<Input, Output> implements TestPlan<Input, Output>{
 		this.components = components;
 	}
 
-	public void addComponents(Component<Input, Output> ... components) {
+	public void addComponents(Component<Input, Output>... components) {
 		this.components.addAll(Arrays.asList(components));
 	}
 
-	public Collection<Metric<TestPlan<Input, Output>>> getGlobalMetrics() {
+	public Collection<Metric<TestPlan<Input, Output>, ?>> getGlobalMetrics() {
 		return globalMetrics;
 	}
-	
-	public void setGlobalMetrics(Collection<Metric<TestPlan<Input, Output>>> globalMetrics) {
+
+	public void setGlobalMetrics(Collection<Metric<TestPlan<Input, Output>, ?>> globalMetrics) {
 		this.globalMetrics = globalMetrics;
 	}
 
-	public void addGlobalMetrics(Metric<TestPlan<Input, Output>> ... metrics) {
+	public void addGlobalMetrics(Metric<TestPlan<Input, Output>, ?>... metrics) {
 		this.globalMetrics.addAll(Arrays.asList(metrics));
 	}
 
-	public Collection<Metric<Input>> getInputMetrics() {
+	public Collection<Metric<Input, ?>> getInputMetrics() {
 		return inputMetrics;
 	}
-	
-	public void setInputMetrics(Collection<Metric<Input>> inputMetrics) {
+
+	public void setInputMetrics(Collection<Metric<Input, ?>> inputMetrics) {
 		this.inputMetrics = inputMetrics;
 	}
 
-	public void addInputMetrics(Metric<Input> ... metrics) {
+	public void addInputMetrics(Metric<Input, ?>... metrics) {
 		this.inputMetrics.addAll(Arrays.asList(metrics));
 	}
 
-	public Collection<Metric<Component<Input, Output>>> getComponentMetrics() {
+	public Collection<Metric<Component<Input, Output>, ?>> getComponentMetrics() {
 		return componentMetrics;
 	}
-	
-	public void setComponentMetrics(Collection<Metric<Component<Input, Output>>> componentMetrics) {
+
+	public void setComponentMetrics(Collection<Metric<Component<Input, Output>, ?>> componentMetrics) {
 		this.componentMetrics = componentMetrics;
 	}
 
-	public void addComponentMetrics(Metric<Component<Input, Output>> ... metrics) {
+	public void addComponentMetrics(Metric<Component<Input, Output>, ?>... metrics) {
 		this.componentMetrics.addAll(Arrays.asList(metrics));
 	}
 
-	public Collection<OperationMetric<Input, Output>> getOperationMetrics() {
+	public Collection<OperationMetric<Input, Output, ?>> getOperationMetrics() {
 		return operationMetrics;
 	}
-	
-	public void setOperationMetrics(Collection<OperationMetric<Input, Output>> operationMetrics) {
+
+	public void setOperationMetrics(Collection<OperationMetric<Input, Output, ?>> operationMetrics) {
 		this.operationMetrics = operationMetrics;
 	}
 
-	public void addOperationMetrics(OperationMetric<Input, Output> ... metrics) {
+	public void addOperationMetrics(OperationMetric<Input, Output, ?>... metrics) {
 		this.operationMetrics.addAll(Arrays.asList(metrics));
 	}
 
@@ -125,9 +125,9 @@ public class TestPlanImpl<Input, Output> implements TestPlan<Input, Output>{
 	public Context getAndroidContext() {
 		return context;
 	}
-	
+
 	public void setAndroidContext(Context context) {
-		this.context=context;
+		this.context = context;
 	}
 
 	public List<Input> getInputs() {

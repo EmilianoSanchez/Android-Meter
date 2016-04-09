@@ -5,7 +5,7 @@ import com.emiliano.androidTestTool.core.metrics.operation.DynamicContextPropert
 import android.content.Context;
 
 public class StaticContextProperties {
-	
+
 	public static enum PropertyName {
 		InstructionSet, SoC, CPU, CPUbits, GPUcores, RAMcapacity, RAMtype, Level1cacheMemory, ProcessTechnology, GPU, RAMchannels, Level0cacheMemory, CPUcores, Level3cacheMemory, CPUfrequency, Level2cacheMemory, GPUfrequency, RAMfrequency
 	}

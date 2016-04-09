@@ -31,13 +31,13 @@ import android.widget.TextView;
 
 public abstract class TestToolActivity<Input, Output> extends Activity implements ExecutorListener {
 
-	
 	protected ListView listView;
 	protected Results results;
 	protected ProgressDialog progressDialog;
 
 	protected abstract TestPlan<Input, Output> getTestPlan();
-	protected Executor<Input, Output> getExecutor(ExecutorListener listener){
+
+	protected Executor<Input, Output> getExecutor(ExecutorListener listener) {
 		return new Executor<Input, Output>(listener);
 	}
 
@@ -57,39 +57,39 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 	public void saveResults(View view) {
 		Log.i("BlackBox", "Saving data...");
 		if (results != null) {
-				try {
-					File file = getFilePath();
-					ResultsUtils.saveToCSV(results,file);
-					
-					AlertDialog dialog = new AlertDialog.Builder(this)
-							.setMessage("Results were saved in " + file.getAbsolutePath()).setTitle("Results saved")
-							.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			try {
+				File file = getFilePath();
+				ResultsUtils.saveToCSV(results, file);
 
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									dialog.dismiss();
-								}
-							}).create();
-					dialog.show();
-				} catch (IOException e) {
-					AlertDialog dialog = new AlertDialog.Builder(this).setMessage(e.getMessage())
-							.setTitle("Error saving results")
-							.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									dialog.dismiss();
-								}
-							}).create();
-					dialog.show();
-				} 
+				AlertDialog dialog = new AlertDialog.Builder(this)
+						.setMessage("Results were saved in " + file.getAbsolutePath()).setTitle("Results saved")
+						.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						}).create();
+				dialog.show();
+			} catch (IOException e) {
+				AlertDialog dialog = new AlertDialog.Builder(this).setMessage(e.getMessage())
+						.setTitle("Error saving results")
+						.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						}).create();
+				dialog.show();
 			}
+		}
 	}
 
 	protected File getFilePath() throws IOException {
 		String externalDir = Environment.getExternalStorageDirectory().getAbsolutePath();
 		if (externalDir == null)
 			throw new IOException("No external storage available");
-		return new File(externalDir + "/"+results.getTestPlan().getName() + ".csv");
+		return new File(externalDir + "/" + results.getTestPlan().getName() + ".csv");
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 	public void onPostExecute(Results allResults[]) {
 		this.results = allResults[0];
 		progressDialog.dismiss();
-		progressDialog=null;
+		progressDialog = null;
 		listView.setAdapter(new ResultsAdapter(ResultsUtils.getDesnormalizedResults(results)));
 		Button saveResults = (Button) this.findViewById(R.id.saveResults);
 		saveResults.setEnabled(true);

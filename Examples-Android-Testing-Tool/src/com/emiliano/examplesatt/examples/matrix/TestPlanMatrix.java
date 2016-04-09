@@ -56,7 +56,7 @@ public class TestPlanMatrix extends TestPlanImpl<MatrixPair, double[][]> {
 		// Operation metrics
 		// this.addOperationMetrics(new MemFree(context));
 		// this.addOperationMetrics(new MemUsage(context));
-		this.addOperationMetrics(new ResponseTimeMetric());
+		this.addOperationMetrics(ResponseTimeMetric.forSeconds());
 	}
 
 }

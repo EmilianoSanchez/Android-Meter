@@ -10,7 +10,7 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
 
-public class MemFree<Input, Output> implements OperationMetric<Input, Output> {
+public class MemFree<Input, Output> implements OperationMetric<Input, Output, Long> {
 
 	private MemoryInfo memoryInfo;
 	private ActivityManager activityManager;
@@ -21,8 +21,8 @@ public class MemFree<Input, Output> implements OperationMetric<Input, Output> {
 		activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
 	}
-	
-	public static final String METRIC_NAME="Free memory in MBs";
+
+	public static final String METRIC_NAME = "Free memory in MBs";
 
 	@Override
 	public Long calculate(Output element) {
@@ -31,7 +31,7 @@ public class MemFree<Input, Output> implements OperationMetric<Input, Output> {
 	}
 
 	@Override
-	public void beforeOperation(Input input, Component<Input, Output> component) {
+	public void onBeforeOperation(Input input, Component<Input, Output> component) {
 		availableMegs = getMemFree();
 	}
 
@@ -44,5 +44,5 @@ public class MemFree<Input, Output> implements OperationMetric<Input, Output> {
 	public String getName() {
 		return METRIC_NAME;
 	}
-	
+
 }

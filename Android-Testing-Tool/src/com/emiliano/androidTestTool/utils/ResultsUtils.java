@@ -3,6 +3,7 @@ package com.emiliano.androidTestTool.utils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +16,14 @@ import com.opencsv.CSVWriter;
 import android.util.Log;
 
 public class ResultsUtils {
+
+	public static void saveToSQLite(Results results, File file) throws IOException {
+//		TO DO
+	}
+
+	public static void saveToFirebase(Results results, URL url) throws IOException {
+//		TO DO
+	}
 
 	public static void saveToCSV(Results results, File file) throws IOException {
 		List<Map<String, Object>> desnormalizedResults = getDesnormalizedResults(results);
@@ -51,13 +60,12 @@ public class ResultsUtils {
 
 		List<Map<String, Object>> dresults = new LinkedList<Map<String, Object>>();
 		Map<String, Object> globalMeasures = results.getGlobalMeasures();
-		
-		List<Map<String, Object>> inputMeasures=results.getInputMeasures();
-		
-		for (int i=0;i< inputMeasures.size();i++) {
-			List<Map<String, Object>> componentMeasures=results.getComponentMeasures();
-			for (int c=0;c< componentMeasures.size();c++) {
-				Map<String, Object> operationMeasures=results.getOperationMeasures(i, c);
+		List<Map<String, Object>> inputMeasures = results.getInputMeasures();
+		List<Map<String, Object>> componentMeasures = results.getComponentMeasures();
+
+		for (int i = 0; i < inputMeasures.size(); i++) {
+			for (int c = 0; c < componentMeasures.size(); c++) {
+				Map<String, Object> operationMeasures = results.getOperationMeasures(i, c);
 				Map<String, Object> result = new TreeMap<String, Object>();
 				result.putAll(globalMeasures);
 				result.putAll(inputMeasures.get(i));
