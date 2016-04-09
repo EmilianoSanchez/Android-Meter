@@ -104,22 +104,34 @@ class Executor {
 	...
 	Results executeTestPlan(TestPlan testPlan){
 		Results results=new Results();
-		for(GlobalMetric m : testPlan.getGlobalMetrics())
-			results.addGlobalMeasure(m.calculate(testPlan));
-		for(Input i : testPlan.getInputs())
-			for(InputMetric m : testPlan.getInputMetrics())
-				results.addInputMeasure(m.calculate(i));
-		for(Component c : testPlan.getComponents())
-			for(ComponentMetric m : testPlan.getComponentMetrics())
-				results.addComponentMeasure(m.calculate(c));
-		for(Input i : testPlan.getInputs())
-			for(Component c : testPlan.getComponents()){
-				for(OperationMetric m : testPlan.getOperationMetrics())
-					m.beforeOperation(i,c);
-				Output o=c.execute(i);
-				for(OperationMetric m : testPlan.getOperationMetrics())
-					results.addOperationMeasure(m.calculate(o));
+		for(GlobalMetric metric : testPlan.getGlobalMetrics()){
+			Measure measure = metric.calculate(testPlan);
+			results.addGlobalMeasure(measure);
+		}
+		for(Input input : testPlan.getInputs()){
+			for(InputMetric metric : testPlan.getInputMetrics()){
+				Measure measure = metric.calculate(input);
+				results.addInputMeasure(measure);
 			}
+		}
+		for(Component component : testPlan.getComponents()){
+			for(ComponentMetric metric : testPlan.getComponentMetrics()){
+				Measure measure = metric.calculate(component);
+				results.addComponentMeasure(measure);
+			}
+		}
+		for(Input input : testPlan.getInputs()){
+			for(Component component : testPlan.getComponents()){
+				for(OperationMetric metric : testPlan.getOperationMetrics()){
+					metric.beforeOperation(input,component);
+				}
+				Output output=component.execute(input);
+				for(OperationMetric metric : testPlan.getOperationMetrics()){
+					Measure measure = metric.calculate(output);
+					results.addOperationMeasure(measure);
+				}
+			}
+		}
 		return results;
 	}
 }
