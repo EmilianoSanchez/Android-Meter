@@ -123,7 +123,7 @@ class Executor {
 		for(Input input : testPlan.getInputs()){
 			for(Component component : testPlan.getComponents()){
 				for(OperationMetric metric : testPlan.getOperationMetrics()){
-					metric.beforeOperation(input,component);
+					metric.onBeforeOperation(input,component);
 				}
 				Output output=component.execute(input);
 				for(OperationMetric metric : testPlan.getOperationMetrics()){
