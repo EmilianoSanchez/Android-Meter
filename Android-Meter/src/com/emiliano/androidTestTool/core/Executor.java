@@ -39,21 +39,13 @@ public class Executor<Input, Output> extends AsyncTask<TestPlan<Input, Output>, 
 		this.publishProgress("executing " + testPlan.getName());
 		ResultsImpl<Input, Output> results = new ResultsImpl<Input, Output>(testPlan);
 
-		this.publishProgress("executing " + testPlan.getName() + ": measuring global properties");
 		for (Metric<TestPlan<Input, Output>, ?> globalMetric : testPlan.getGlobalMetrics()) {
 			results.addGlobalMeasure(globalMetric.getName(), globalMetric.calculate(testPlan));
 		}
 
-		this.publishProgress("executing " + testPlan.getName() + ": measuring input properties");
-		List<Input> inputs = testPlan.getInputs();
-		for (int i = 0; i < inputs.size(); i++) {
-			for (Metric<Input, ?> inputMetric : testPlan.getInputMetrics()) {
-				results.addInputMeasure(i, inputMetric.getName(), inputMetric.calculate(inputs.get(i)));
-			}
-		}
-
-		this.publishProgress("executing " + testPlan.getName() + ": measuring component properties");
+		List<Loader<Input>> inputs = testPlan.getInputs();
 		List<Component<Input, Output>> components = testPlan.getComponents();
+		
 		for (int c = 0; c < components.size(); c++) {
 			for (Metric<Component<Input, Output>, ?> componentMetric : testPlan.getComponentMetrics()) {
 				results.addComponentMeasure(c, componentMetric.getName(), componentMetric.calculate(components.get(c)));
@@ -64,26 +56,35 @@ public class Executor<Input, Output> extends AsyncTask<TestPlan<Input, Output>, 
 		int totalOperations = inputs.size() * components.size();
 
 		for (int i = 0; i < inputs.size(); i++) {
-			Input input = inputs.get(i);
+			Loader<Input> inputLoader= inputs.get(i);
+			inputLoader.loadElement();
+			Input input = inputLoader.getElement();
+
+			for (Metric<Input, ?> inputMetric : testPlan.getInputMetrics()) {
+				results.addInputMeasure(i, inputMetric.getName(), inputMetric.calculate(input));
+			}
+			
 			for (int c = 0; c < components.size(); c++) {
 				Component<Input, Output> component = components.get(c);
 
 				currentOperation++;
-				this.publishProgress("executing " + testPlan.getName() + ": operation " + currentOperation + " of "
+				if(currentOperation%100==0)
+					this.publishProgress("executing " + testPlan.getName() + ": operation " + currentOperation + " of "
 						+ totalOperations);
 
 				for (OperationMetric<Input, Output, ?> operationMetric : testPlan.getOperationMetrics()) {
 					operationMetric.onBeforeOperation(input, component);
 				}
+				System.gc();
 				Output output = component.execute(input);
 				for (OperationMetric<Input, Output, ?> operationMetric : testPlan.getOperationMetrics()) {
 					results.addOperationMeasure(i, c, operationMetric.getName(), operationMetric.calculate(output));
 				}
 
-				if (testPlan.getDelayBetweenOperations() > 0) {
+				if (testPlan.getDelayBetweenOperationsMillis() > 0) {
 					synchronized (this) {
 						try {
-							wait(testPlan.getDelayBetweenOperations());
+							wait(testPlan.getDelayBetweenOperationsMillis());
 						} catch (InterruptedException exeption) {
 							exeption.printStackTrace();
 						}
@@ -91,6 +92,8 @@ public class Executor<Input, Output> extends AsyncTask<TestPlan<Input, Output>, 
 				}
 
 			}
+			
+			inputLoader.releaseElement();
 		}
 		return results;
 	}

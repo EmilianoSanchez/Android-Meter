@@ -15,18 +15,18 @@ public interface TestPlan<Input, Output> {
 
 	public Context getAndroidContext();
 
-	public List<Input> getInputs();
+	public List<Loader<Input>> getInputs();
 
 	public List<Component<Input, Output>> getComponents();
 
-	public Collection<Metric<TestPlan<Input, Output>, ?>> getGlobalMetrics();
+	public List<Metric<TestPlan<Input, Output>, ?>> getGlobalMetrics();
 
-	public Collection<Metric<Input, ?>> getInputMetrics();
+	public List<Metric<Input, ?>> getInputMetrics();
 
-	public Collection<Metric<Component<Input, Output>, ?>> getComponentMetrics();
+	public List<Metric<Component<Input, Output>, ?>> getComponentMetrics();
 
-	public Collection<OperationMetric<Input, Output, ?>> getOperationMetrics();
+	public List<OperationMetric<Input, Output, ?>> getOperationMetrics();
 
-	public long getDelayBetweenOperations();
+	public long getDelayBetweenOperationsMillis();
 
 }

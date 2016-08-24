@@ -31,11 +31,14 @@ import android.widget.TextView;
 
 public abstract class TestToolActivity<Input, Output> extends Activity implements ExecutorListener {
 
-	protected ListView listView;
-	protected Results results;
+	// protected ListView listView;
+	protected Results<Input, Output>[] results;
 	protected ProgressDialog progressDialog;
 
-	protected abstract TestPlan<Input, Output> getTestPlan();
+	protected Executor<Input, Output> executor;
+	protected TestPlan<Input, Output>[] plans;
+
+	protected abstract TestPlan<Input, Output>[] getTestPlans();
 
 	protected Executor<Input, Output> getExecutor(ExecutorListener listener) {
 		return new Executor<Input, Output>(listener);
@@ -45,21 +48,21 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.test_tool_activity);
-		listView = (ListView) this.findViewById(R.id.listView);
+		// listView = (ListView) this.findViewById(R.id.listView);
 	}
 
 	public void executePlan(View view) {
-		Executor<Input, Output> executor = getExecutor(this);
-		TestPlan<Input, Output> plan = getTestPlan();
-		executor.execute(plan);
+		executor = getExecutor(this);
+		plans = getTestPlans();
+		executor.execute(plans);
 	}
 
-	public void saveResults(View view) {
+	public void saveResultsTogether(View view) {
 		Log.i("BlackBox", "Saving data...");
 		if (results != null) {
 			try {
-				File file = getFilePath();
-				ResultsUtils.saveToCSV(results, file);
+				File file = getFilePath("RESULTADOS-"+this.getClass().getSimpleName()+".csv");
+				ResultsUtils.saveToCSV_DesnormalizedData(file, results);
 
 				AlertDialog dialog = new AlertDialog.Builder(this)
 						.setMessage("Results were saved in " + file.getAbsolutePath()).setTitle("Results saved")
@@ -85,11 +88,80 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 		}
 	}
 
-	protected File getFilePath() throws IOException {
+	public void saveResults(View view) {
+		Log.i("BlackBox", "Saving data...");
+		if (results != null) {
+			try {
+				File file = null;
+				for (int r = 0; r < results.length; r++) {
+						file = getFilePath(plans[r].getName() + ".csv");
+						ResultsUtils.saveToCSV_DesnormalizedData(file, results[r]);
+				}
+					
+				AlertDialog dialog = new AlertDialog.Builder(this)
+						.setMessage("Results were saved in " + file.getAbsolutePath()).setTitle("Results saved")
+						.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						}).create();
+				dialog.show();
+			} catch (IOException e) {
+				AlertDialog dialog = new AlertDialog.Builder(this).setMessage(e.getMessage())
+						.setTitle("Error saving results")
+						.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						}).create();
+				dialog.show();
+			}
+		}
+	}
+
+	public void saveResultsMatrix(View view) {
+		Log.i("BlackBox", "Saving data...");
+		if (results != null) {
+			try {
+				File file=null;
+				for (int r = 0; r < results.length; r++) {
+					 file = getFilePath(plans[r].getName() + ".csv");
+					ResultsUtils.saveToCSV_InputComponentMatrix(results[r], file,
+							plans[r].getInputMetrics().get(0).getName(),
+							plans[r].getComponentMetrics().get(0).getName(),
+							plans[r].getOperationMetrics().get(0).getName());
+				}
+				AlertDialog dialog = new AlertDialog.Builder(this).setMessage("Results were saved in " + file.getAbsolutePath())
+						.setTitle("Results saved").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						}).create();
+				dialog.show();
+			} catch (IOException e) {
+				AlertDialog dialog = new AlertDialog.Builder(this).setMessage(e.getMessage())
+						.setTitle("Error saving results")
+						.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						}).create();
+				dialog.show();
+			}
+		}
+	}
+
+	protected File getFilePath(String fileName) throws IOException {
 		String externalDir = Environment.getExternalStorageDirectory().getAbsolutePath();
 		if (externalDir == null)
 			throw new IOException("No external storage available");
-		return new File(externalDir + "/" + results.getTestPlan().getName() + ".csv");
+		return new File(externalDir + "/" + fileName);
 	}
 
 	@Override
@@ -106,13 +178,18 @@ public abstract class TestToolActivity<Input, Output> extends Activity implement
 	}
 
 	@Override
-	public void onPostExecute(Results allResults[]) {
-		this.results = allResults[0];
+	public void onPostExecute(Results[] allResults) {
+		this.results = allResults;
 		progressDialog.dismiss();
 		progressDialog = null;
-		listView.setAdapter(new ResultsAdapter(ResultsUtils.getDesnormalizedResults(results)));
+		// listView.setAdapter(new
+		// ResultsAdapter(ResultsUtils.getDesnormalizedResults(results)));
 		Button saveResults = (Button) this.findViewById(R.id.saveResults);
 		saveResults.setEnabled(true);
+		Button saveResultsMatrix = (Button) this.findViewById(R.id.saveResultsMatrix);
+		saveResultsMatrix.setEnabled(true);
+		Button saveResultsTogether = (Button) this.findViewById(R.id.saveResultsTogether);
+		saveResultsTogether.setEnabled(true);
 	}
 
 	public static class ResultsAdapter extends BaseAdapter {

@@ -16,7 +16,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="executePlan"
-                android:text="Execute plan" />
+                android:text="Execute plan"
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/saveResults"
@@ -24,7 +25,35 @@
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:onClick="saveResults"
-                android:text="Save results" />
+                android:text="Save results"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+        
+                <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        
+            <Button
+                android:id="@+id/saveResultsMatrix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:onClick="saveResultsMatrix"
+                android:text="Save results I-C matrix"
+                android:layout_weight="1" />
+            
+            <Button
+                android:id="@+id/saveResultsTogether"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:onClick="saveResultsTogether"
+                android:text="Save results together"
+                android:layout_weight="1" />
+            
+            
         </LinearLayout>
 
         <TextView
