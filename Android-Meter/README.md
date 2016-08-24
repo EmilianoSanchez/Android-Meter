@@ -1,2 +1,2 @@
-# Android Testing Tool
-An Android tool for testing and predicting non-functional properties of black-box components
+# Android Meter
+An Android library for benchmarking non-functional properties of Android components.
