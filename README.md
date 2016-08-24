@@ -43,10 +43,10 @@ The method consist of the following activities:
 
 ##Testing
 
-The testing activity is supported by the [AndroidMeter library](https://github.com/EmilianoSanchez/Android-Meter/tree/master/Android-Meter-Library). It is an Android library that automatically performs test plans, i.e., a systemathic execution and measure of component operations with a set of inputs and varying execution conditions. 
+The testing activity is supported by the [AndroidMeter library](https://github.com/EmilianoSanchez/Android-Meter/tree/master/Android-Meter). It is an Android library that automatically performs test plans, i.e., a systemathic execution and measure of component operations with a set of inputs and varying execution conditions. 
 
 Examples using AndroidMeter are included in the following Android application projects:
-- [Examples-Android-Meter-Library](https://github.com/EmilianoSanchez/Android-Meter/tree/master/Examples-Android-Meter-Library): it includes basic testing examples in domains like matrix multiplication and algoritms for solving the Knapsack problem. 
+- [Examples-Android-Meter](https://github.com/EmilianoSanchez/Android-Meter/tree/master/Examples-Android-Meter): it includes basic testing examples in domains like matrix multiplication and algoritms for solving the Knapsack problem. 
 - [Evaluation-of-Face-Detection-Services](https://github.com/EmilianoSanchez/Android-Performance-Testing-and-Prediction/tree/master/Evaluation-of-Face-Detection-Services): it extends AndroidMeter for testing Android Services and Web Services that perform face detection over images.
 
 The core concepts that describe the AndroidMeter framework are explained below:
