@@ -1,5 +1,5 @@
-#Android Performance Testing and Prediction
-A method and Android tools for testing and predicting performance properties of runtime components using machine learning techniques.
+#Android Meter
+A method and Android library for testing and predicting performance properties of runtime components using machine learning techniques.
 
 ####Table of Contents
 - [Objectives](#objectives)
@@ -43,13 +43,13 @@ The method consist of the following activities:
 
 ##Testing
 
-The testing activity is supported by the [Android Testing Tool](https://github.com/EmilianoSanchez/Android-Performance-Testing-and-Prediction/tree/master/Android-Testing-Tool) (ATT). It is an Android library that automatically performs test plans, i.e., a systemathic execution and measure of component operations with a set of inputs and varying execution conditions. 
+The testing activity is supported by the [AndroidMeter library](https://github.com/EmilianoSanchez/Android-Meter/tree/master/Android-Meter-Library). It is an Android library that automatically performs test plans, i.e., a systemathic execution and measure of component operations with a set of inputs and varying execution conditions. 
 
-Examples using ATT are included in the following Android application projects:
-- [Examples-Android-Testing-Tool](https://github.com/EmilianoSanchez/Android-Performance-Testing-and-Prediction/tree/master/Examples-Android-Testing-Tool): it includes basic testing examples in domains like matrix multiplication and algoritms for solving the Knapsack problem. 
-- [Evaluation-of-Face-Detection-Services](https://github.com/EmilianoSanchez/Android-Performance-Testing-and-Prediction/tree/master/Evaluation-of-Face-Detection-Services): it extends ATT for testing Android Services and Web Services that perform face detection over images.
+Examples using AndroidMeter are included in the following Android application projects:
+- [Examples-Android-Meter-Library](https://github.com/EmilianoSanchez/Android-Meter/tree/master/Examples-Android-Meter-Library): it includes basic testing examples in domains like matrix multiplication and algoritms for solving the Knapsack problem. 
+- [Evaluation-of-Face-Detection-Services](https://github.com/EmilianoSanchez/Android-Performance-Testing-and-Prediction/tree/master/Evaluation-of-Face-Detection-Services): it extends AndroidMeter for testing Android Services and Web Services that perform face detection over images.
 
-The core concepts that describe the ATT framework are explained below:
+The core concepts that describe the AndroidMeter framework are explained below:
 
 ###Component
 A component is an individual runtime software entity that provides services (a set of related functions and data) through an specific interface (API). The tool focus on three kind of components:
