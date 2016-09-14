@@ -1,14 +1,14 @@
 #Android Meter
-A method and Android library for testing and predicting performance properties of runtime components using machine learning techniques.
+A method and Android library for benchmarking and predicting performance properties of runtime components using machine learning techniques.
 
 ####Table of Contents
 - [Objectives](#objectives)
 - [Workflow overview](#workflow-overview) 
-- [Testing](#testing)
+- [Benchmark](#benchmark)
   * [Component](#component)
   * [Operation](#operation)
   * [Execution context](#execution-context)
-  * [Test plan](#test-plan)
+  * [Benchmark plan](#benchmark-plan)
   * [Metrics](#metrics)
   * [Results](#results)
 - [Prediction](#prediction)
@@ -21,9 +21,9 @@ The performance of runtime components (algoritms, Web services, background proce
 
 To have some insight of their performance, machine learning techniques over empirically collected data can be used to build prediction models of the component’s runtime, as a function of input parameters and execution context specific features. 
 
-This method focus on the following properties:
- - **Response time**: it is the total amount of time that a component takes to perform a task or **operation**, i.e. to respond to a request with a given input. A response time model over a component **C** is defined as a function **Rc(E,I)=r**, being **E** a set of measured execution context features **E=[E1,...Ee]** (like CPU cores, Network type, etc), **I** a set of measured input parameter features **I=[I1,...Ii]** (input size in bytes, etc), and **r** the estimated response time.
- - **Accuracy**: it is a measure of the quality of the component output results. It has different meanings depending on the required functionality. For instance, in classification problems, it is the statistical measure of how well a classifier, like a face detector, correctly identifies or excludes a condition. In optimization problems, it is also known as Optimality and is usually measured as a ratio between the obteined output solution value and the optimal known value. In most cases, accuracy do not depends on execution context features, in contrast to response time. Therefore, an accuracy model over a component **C** is defined as a function **Ac(I)=a**, being  **I** a set of measured input parameter features **I=[I1,...Ii]**, and **a** the estimated accuracy.
+This method focus on the following non-functional runtime properties:
+ - **Response time**: it is the total amount of time that a component takes to perform a task or **operation**, i.e. to respond to a request with a given input. A response time model over a component **C** is defined as a function **Rc(E,I)=r**, being **E** a set of measured execution context features **E=[E1,...Ee]** (such as CPU cores, Network type, etc), **I** a set of measured input parameter features **I=[I1,...Ii]** (input size in bytes, etc), and **r** the estimated response time.
+ - **Accuracy**: it is a measure of the quality of the component output results. It has different meanings depending on the required functionality. For instance, in classification problems, it is the statistical measure of how well a classifier, such as a face detector, correctly identifies or excludes a condition. In optimization problems, it is also known as Optimality and is usually measured as a ratio between the obteined output solution value and the optimal known value. In most cases, accuracy do not depends on execution context features, in contrast to response time. Therefore, an accuracy model over a component **C** is defined as a function **Ac(I)=a**, being  **I** a set of measured input parameter features **I=[I1,...Ii]**, and **a** the estimated accuracy.
 
 Such models are known as **empirical performance models** (EPM), and are useful in a variety of practical contexts:
  - Algoritm selection and configuration: performance models can be used to dynamically select the best from a given set
@@ -35,19 +35,19 @@ of algorithm configurations, depending on the problem instance and hardware char
 ##Workflow overview
 
 The method consist of the following activities:
-- **Testing** (or measurement): obtain empirical data performing a test plan over a set of components.
+- **Benchmark** (or testing): obtain empirical data performing a benchmark plan over a set of components.
 - **Prediction**: use the collected data for building and evaluating prediction models.
 - **Application**: use the models in some practical context: algoritm configuration, service selection, job scheduling, etc.
 
 ![Method workflow](/Documentation/Images/MethodWorkflow.png)
 
-##Testing
+##Benchmark
 
-The testing activity is supported by the [AndroidMeter library](https://github.com/EmilianoSanchez/Android-Meter/tree/master/Android-Meter). It is an Android library that automatically performs test plans, i.e., a systemathic execution and measure of component operations with a set of inputs and varying execution conditions. 
+The benchmark activity is supported by the [AndroidMeter library](https://github.com/EmilianoSanchez/Android-Meter/tree/master/Android-Meter). It is an Android library that automatically performs benchmark plans, i.e., a systemathic execution and measure of component operations with a set of inputs and varying execution conditions. 
 
 Examples using AndroidMeter are included in the following Android application projects:
-- [Examples-Android-Meter](https://github.com/EmilianoSanchez/Android-Meter/tree/master/Examples-Android-Meter): it includes basic testing examples in domains like matrix multiplication and algoritms for solving the Knapsack problem. 
-- [Evaluation-of-Face-Detection-Services](https://github.com/EmilianoSanchez/Android-Performance-Testing-and-Prediction/tree/master/Evaluation-of-Face-Detection-Services): it extends AndroidMeter for testing Android Services and Web Services that perform face detection over images.
+- [Examples-Android-Meter](https://github.com/EmilianoSanchez/Android-Meter/tree/master/Examples-Android-Meter): it includes basic benchmark examples in domains like matrix multiplication and algoritms for solving the Knapsack problem. 
+- [Evaluation-of-Face-Detection-Services](https://github.com/EmilianoSanchez/Android-Meter/tree/master/Evaluation-of-Face-Detection-Services): it extends AndroidMeter for benchmarking Android Services and Web Services that perform face detection over images.
 
 The core concepts that describe the AndroidMeter framework are explained below:
 
@@ -90,43 +90,43 @@ An operation, task or job is a unit of work performed by a component. An operati
 ###Execution context
 The execution context is the environment where the components reside. Since environment conditions vary dynamically, operation performance also vary.
 
-###Test plan
-A test plan is an object instance of the **TestPlan** class that defines a systemathic execution of operations and measures over them. 
-A test plan is composed by: 
+###Benchmark plan
+A benchmark plan is an object instance of the **BenchmarkPlan** class that defines a systemathic execution of operations and measures over them. 
+A benchmark plan is composed by: 
 - a set of components, 
 - a set of input objects,
 - and a set of **metrics** that carry out the measures.
 
-An **Executor** object executes the test plans and stores the measured values on a **Result** object instance. The following pseudo-code describe the execution sequence of operations and measures:
+An **Executor** object executes benchmark plans and stores the measured values on a **Result** object instance. The following pseudo-code describe the execution sequence of operations and measures:
 
 ```java
 class Executor {
 	...
-	Results executeTestPlan(TestPlan testPlan){
+	Results executeBenchmarkPlan(BenchmarkPlan plan){
 		Results results=new Results();
-		for(GlobalMetric metric : testPlan.getGlobalMetrics()){
-			Measure measure = metric.calculate(testPlan);
+		for(GlobalMetric metric : plan.getGlobalMetrics()){
+			Measure measure = metric.calculate(plan);
 			results.addGlobalMeasure(measure);
 		}
-		for(Input input : testPlan.getInputs()){
-			for(InputMetric metric : testPlan.getInputMetrics()){
+		for(Input input : plan.getInputs()){
+			for(InputMetric metric : plan.getInputMetrics()){
 				Measure measure = metric.calculate(input);
 				results.addInputMeasure(measure);
 			}
 		}
-		for(Component component : testPlan.getComponents()){
-			for(ComponentMetric metric : testPlan.getComponentMetrics()){
+		for(Component component : plan.getComponents()){
+			for(ComponentMetric metric : plan.getComponentMetrics()){
 				Measure measure = metric.calculate(component);
 				results.addComponentMeasure(measure);
 			}
 		}
-		for(Input input : testPlan.getInputs()){
-			for(Component component : testPlan.getComponents()){
-				for(OperationMetric metric : testPlan.getOperationMetrics()){
+		for(Input input : plan.getInputs()){
+			for(Component component : plan.getComponents()){
+				for(OperationMetric metric : plan.getOperationMetrics()){
 					metric.onBeforeOperation(input,component);
 				}
 				Output output=component.execute(input);
-				for(OperationMetric metric : testPlan.getOperationMetrics()){
+				for(OperationMetric metric : plan.getOperationMetrics()){
 					Measure measure = metric.calculate(output);
 					results.addOperationMeasure(measure);
 				}
@@ -138,13 +138,13 @@ class Executor {
 ```
 ###Metrics
 They are the units of code that computes a measure or feature value from some element. The tool distinguish 4 kind of metrics depending on the measured element:
-- **Global metrics** compute **static context features**, i.e., execution context features that remain static during the test plan, like the device model, CPU architecture, number of CPU cores, memory size, etc.
-- **Input metrics** compute **input features** that depends on the problem domain. For instance, in face detection on images, some input features are the image name, size, color contrast, file format, etc.  
-- **Component metrics** compute **component features** like its name, location, etc.
-- **Operation metrics** compute three kind of features:
- * **Output features**: these are characteristics of the operation result, like its size, quality, etc. Like input features, they depend on the problem domain. In face detection for instance, the output is a vector with the location of the detected faces, therefore, an interesting output feature is the size of this vector, i.e., the amount of detected faces.
- * **Dynamic context features**: this are characteristics of the execution environment that may vary from operation to operation, like the CPU usage, number of runnning processes, connection type, device location, etc.
- * **Performance features**: this are the performance measures of interest that vary from operation to operation, like response time, consumed battery, operation executed with error or not, etc. 
+- **Global metrics** compute **static context properties**, i.e., execution context properties that remain static during the plan execution, such as the device model, CPU architecture, number of CPU cores, memory size, etc.
+- **Input metrics** compute **input properties** that depends on the problem domain. For instance, in face detection on images, some input properties are the image name, size, color contrast, file format, etc.  
+- **Component metrics** compute **component properties** such as its name, type, location, etc.
+- **Operation metrics** compute three kind of properties:
+ * **Output properties**: these are characteristics of the operation result, such as its size, quality, etc. Like input features, they depend on the problem domain. In face detection for instance, the output is a vector with the location of the detected faces, therefore, an output property may be the size of this vector, i.e., the amount of detected faces.
+ * **Dynamic context properties**: these are characteristics of the execution environment that may vary from operation to operation, like the CPU usage, number of runnning processes, connection type, device location, etc.
+ * **Runtime properties**: this are the performance measures of interest to predict, that vary from operation to operation, such as response time, consumed battery, result accuracy, operation executed with error or not, etc. 
 
 ###Results
 It is the object that stores the measured data and exports it into a CSV file for its latter processing. 
